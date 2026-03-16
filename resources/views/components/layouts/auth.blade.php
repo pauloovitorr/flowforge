@@ -14,7 +14,7 @@
         <x-nav></x-nav>
     </header>
 
-    <main>
+    <main class="w-[98%] max-w-7xl mx-auto">
         {{ $slot }}
     </main>
 

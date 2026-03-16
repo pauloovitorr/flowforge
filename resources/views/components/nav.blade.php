@@ -4,25 +4,25 @@
     </div>
     <div>
         <ul class="flex gap-8 items-center">
-            <li><a href="#" class="hover:text-cyan-600">Home</a></li>
-            <li><a href="#" class="hover:text-cyan-600">Sobre</a></li>
-            <li><a href="#" class="hover:text-cyan-600">Serviços</a></li>
-            <li><a href="#" class="hover:text-cyan-600">Blog</a></li>
-            <li><a href="#" class="hover:text-cyan-600">Contato</a></li>
+         
+            <li><a href="#" class="hover:text-cyan-600 duration-300 ease-in-out">Sobre</a></li>
+            <li><a href="#" class="hover:text-cyan-600 duration-300 ease-in-out">Serviços</a></li>
+            <li><a href="#" class="hover:text-cyan-600 duration-300 ease-in-out">Blog</a></li>
+            <li><a href="#" class="hover:text-cyan-600 duration-300 ease-in-out">Contato</a></li>
 
             {{-- Botão de Login (Estilo Diferente) --}}
 
             @auth
                 <li>
                     <a href="{{ route('login') }}"
-                        class=" {{ request()->routeIs('login') ? 'text-cyan-600' : 'bg-slate-800 text-white hover:bg-slate-700' }}">
+                        class=" {{ request()->routeIs('login') ? 'text-cyan-600' : 'hover:text-cyan-600' }} duration-300 ease-in-out">
                         Logout
                     </a>
                 </li>
             @else
                 <li>
                     <a href="{{ route('login') }}"
-                        class=" {{ request()->routeIs('login') ? 'text-cyan-600' : 'bg-slate-800 text-white hover:bg-slate-700' }}">
+                        class=" {{ request()->routeIs('login') ? 'text-cyan-600' : 'hover:text-cyan-600' }} duration-300 ease-in-out">
                         Login
                     </a>
                 </li>
