@@ -5,24 +5,24 @@
     <div>
         <ul class="flex gap-8 items-center">
          
-            <li><a href="#" class="hover:text-cyan-600 duration-300 ease-in-out">Sobre</a></li>
-            <li><a href="#" class="hover:text-cyan-600 duration-300 ease-in-out">Serviços</a></li>
-            <li><a href="#" class="hover:text-cyan-600 duration-300 ease-in-out">Blog</a></li>
-            <li><a href="#" class="hover:text-cyan-600 duration-300 ease-in-out">Contato</a></li>
+            <li><a href="#" class="hover:text-cyan-700 duration-300 ease-in-out">Sobre</a></li>
+            <li><a href="#" class="hover:text-cyan-700 duration-300 ease-in-out">Serviços</a></li>
+            <li><a href="#" class="hover:text-cyan-700 duration-300 ease-in-out">Blog</a></li>
+            <li><a href="#" class="hover:text-cyan-700 duration-300 ease-in-out">Contato</a></li>
 
             {{-- Botão de Login (Estilo Diferente) --}}
 
             @auth
                 <li>
                     <a href="{{ route('login') }}"
-                        class=" {{ request()->routeIs('login') ? 'text-cyan-600' : 'hover:text-cyan-600' }} duration-300 ease-in-out">
+                        class=" {{ request()->routeIs('login') ? 'text-cyan-700' : 'hover:text-cyan-700' }} duration-300 ease-in-out">
                         Logout
                     </a>
                 </li>
             @else
                 <li>
                     <a href="{{ route('login') }}"
-                        class=" {{ request()->routeIs('login') ? 'text-cyan-600' : 'hover:text-cyan-600' }} duration-300 ease-in-out">
+                        class=" {{ request()->routeIs('login') ? 'text-cyan-700' : 'hover:text-cyan-700' }} duration-300 ease-in-out">
                         Login
                     </a>
                 </li>
