@@ -1,7 +1,7 @@
 <nav class="w-[100%] mb-4 py-6 shadow-sm bg-white">
     <div class="w-[96%] max-w-7xl mx-auto  flex justify-between items-center">
         <!-- Logo -->
-    <a href="{{ route('home') }}" class="font-black text-2xl tracking-[0.2em] uppercase text-slate-800  transition-colors">
+    <a href="{{ route('dashboard') }}" class="font-black text-2xl tracking-[0.2em] uppercase text-slate-800  transition-colors">
         Flow<span class="text-cyan-500">Forge</span>
     </a>
     
@@ -35,7 +35,7 @@
                 {{ substr(auth()->user()->name, 0, 2) }}
             </div>
             <div class="hidden md:flex flex-col items-end gap-0.5 mr-1">
-                <span class="text-sm font-medium text-gray-900 group-hover:text-cyan-500">
+                <span class="text-sm font-medium text-gray-900 ">
                     {{ auth()->user()->name }}
                 </span>
             </div>
