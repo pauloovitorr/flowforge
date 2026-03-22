@@ -10,4 +10,6 @@ Route::controller(ProjectController::class)
 
         Route::post('/project', 'store')->name('project.store');
 
+        Route::delete('/project/{id}', 'destroy')->name('project.destroy');
+
     });

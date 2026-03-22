@@ -12,7 +12,7 @@
 
     </x-sistema.page-presentation>
 
-    <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-3 gap-4">
+    <div class="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
 
         @foreach ($projects as $project)
             <x-sistema.project-component.list-project 
