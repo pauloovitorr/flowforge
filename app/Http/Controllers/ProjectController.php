@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Project;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Service\ProjectService;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use App\Models\Project;
 
 class ProjectController extends Controller
 {
@@ -14,11 +14,14 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return view('project.index');
+
+        $projects = Project::orderBy('created_at', 'desc')->get();
+
+        return view('project.index')->with('projects', $projects);
+
     }
 
     /**
-     * 
      * Show the form for creating a new resource.
      */
     public function create()
@@ -31,7 +34,22 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+        try {
+            // Tenta executar a lógica da Service
+            ProjectService::addProject($request->validated());
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Projeto criado com sucesso!',
+            ], 201);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Não foi possível criar o projeto. Tente novamente mais tarde.',
+            ], 500);
+        }
     }
 
     /**

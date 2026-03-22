@@ -8,4 +8,6 @@ Route::controller(ProjectController::class)
 
         Route::get('/project', 'index')->name('project.index');
 
+        Route::post('/project', 'store')->name('project.store');
+
     });
