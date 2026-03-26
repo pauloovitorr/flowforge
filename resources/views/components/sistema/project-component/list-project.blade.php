@@ -22,6 +22,7 @@
                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
             </button>
         </div>
+        
     </div>
 
     <div class="bg-zinc-50 p-2.5 rounded-lg border border-zinc-100 mt-4">

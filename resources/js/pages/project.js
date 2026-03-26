@@ -5,8 +5,16 @@ $(function () {
         abrirModalProjeto();
     });
 
-    $(".btn-excluir").on("click", function () {
+    $(".btn-editar").on("click", function () {
+        let $card = $(this).closest(".project");
+        let id_project = $card.data("id");
+        let nome = $card.find('h3').text().trim()
+        
+        editarProjeto(id_project,nome)
 
+    });
+
+    $(".btn-excluir").on("click", function () {
         let $card = $(this).closest(".project");
         let id_project = $card.data("id");
 
@@ -37,7 +45,6 @@ $(function () {
                         _token: $('meta[name="csrf-token"]').attr("content"),
                     },
                     success: function (response) {
-                        
                         Swal.close();
                         $card.fadeOut(400, function () {
                             $(this).remove();
@@ -148,6 +155,61 @@ function salvarProjeto(nome) {
             Swal.fire("Erro!", "Falha ao salvar.", "error");
 
             $("#btn-add-project").prop("disabled", false);
+        },
+    });
+}
+
+
+function editarProjeto(id, nomeAtual) {
+    Swal.fire({
+        title: "Editar Projeto",
+        html: `
+            <div class="text-left">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Projeto</label>
+                <input type="text" id="edit-project-name" class="w-full p-2 border border-gray-300 rounded-md outline-none focus:border-zinc-900" value="${nomeAtual}">
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: "Salvar Alterações",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: "#18181b",
+        preConfirm: () => {
+            const name = document.getElementById("edit-project-name").value;
+            if (!name) {
+                Swal.showValidationMessage("O nome é obrigatório");
+                return false;
+            }
+            return { name: name };
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            atualizarProjeto(id, result.value.name);
+        }
+    });
+}
+
+
+
+function atualizarProjeto(id, novoNome) {
+    Swal.fire({
+        title: "Atualizando...",
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading(); },
+    });
+
+    $.ajax({
+        url: `/project/${id}`, 
+        method: "PATCH", 
+        data: {
+            _token: $('meta[name="csrf-token"]').attr("content"),
+            name: novoNome,
+        },
+        success: function (response) {
+            Swal.fire("Sucesso!", "Projeto atualizado.", "success")
+                .then(() => location.reload());
+        },
+        error: function () {
+            Swal.fire("Erro!", "Não foi possível atualizar.", "error");
         },
     });
 }

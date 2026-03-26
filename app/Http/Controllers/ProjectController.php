@@ -71,9 +71,21 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProjectRequest $request, Project $project)
+    public function update(UpdateProjectRequest $request, $id)
     {
-        //
+        try {
+            // Chamamos a service passando o modelo e apenas os dados validados
+            ProjectService::updateProject($id, $request->validated());
+
+            return response()->json([
+                'message' => 'Projeto atualizado com sucesso!',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Erro ao atualizar o projeto.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
