@@ -75,7 +75,7 @@ $(function () {
     });
 
     $(".btn-copiar").on("click", function () {
-        const apiKey = $(this).closest(".bg-zinc-50").find("code").text();
+        const apiKey = $(this).closest(".bg-zinc-50").find("code").text().trim();
         navigator.clipboard.writeText(apiKey);
 
         Swal.fire({

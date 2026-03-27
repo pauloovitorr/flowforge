@@ -6,6 +6,7 @@ use App\Http\Controllers\Service\ProjectService;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -15,7 +16,8 @@ class ProjectController extends Controller
     public function index()
     {
 
-        $projects = Project::orderBy('created_at', 'desc')->get();
+        $id_user = Auth::id();
+        $projects = Project::where('user_id', $id_user )->orderBy('created_at', 'desc')->get();
 
         return view('project.index')->with('projects', $projects);
 
