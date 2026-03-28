@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Api\Event;
+use App\Http\Controllers\Api\EventController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -9,4 +9,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::post('/event', [Event::class, 'store'])->name('event.store');
+Route::post('/event', [EventController::class, 'store'])->name('event.store');

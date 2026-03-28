@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Event;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreEventRequest;
-use App\Http\Requests\UpdateEventRequest;
+use App\Http\Controllers\Service\Api\EventService;
+use App\Http\Requests\Api\StoreEventRequest;
+use App\Http\Requests\Api\UpdateEventRequest;
+use App\Models\Api\Event;
 
 class EventController extends Controller
 {
@@ -22,7 +23,26 @@ class EventController extends Controller
      */
     public function store(StoreEventRequest $request)
     {
-        //
+        try {
+
+            $project_id = EventService::searchProject($request->bearerToken());
+
+            $event = EventService::createProject( $project_id, $request->validated());
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $event,
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 404, [], JSON_UNESCAPED_UNICODE);
+
+        }
+
     }
 
     /**
