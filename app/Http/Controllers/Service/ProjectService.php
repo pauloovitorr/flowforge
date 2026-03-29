@@ -28,8 +28,13 @@ class ProjectService
     public static function updateProject($id, array $data)
     {
         try {
-
             $project = Project::find($id);
+
+           
+
+            if (! empty($data['generate_key']) &&  $data['generate_key'] == true  ) {
+                $data['api_key'] = Str::random(32);
+            }
 
             $project->update($data);
         } catch (Exception $e) {

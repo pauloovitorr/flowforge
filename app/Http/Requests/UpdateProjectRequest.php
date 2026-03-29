@@ -25,6 +25,7 @@ class UpdateProjectRequest extends FormRequest
         return [
 
             'name' => 'required|string|max:255',
+            'generate_key' => 'nullable|boolean',
         ];
     }
 
@@ -37,6 +38,7 @@ class UpdateProjectRequest extends FormRequest
             'name.required' => 'O nome do projeto é obrigatório.',
             'name.string' => 'O nome deve ser um texto válido.',
             'name.max' => 'O nome não pode ter mais de 255 caracteres.',
+            'generate_key.boolean' => 'O valor para gerar a chave deve ser verdadeiro ou falso.',
         ];
     }
 }

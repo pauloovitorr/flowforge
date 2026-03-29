@@ -37,6 +37,9 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request)
     {
         try {
+
+      
+
             // Tenta executar a lógica da Service
             ProjectService::addProject($request->validated());
 
@@ -76,6 +79,8 @@ class ProjectController extends Controller
     public function update(UpdateProjectRequest $request, $id)
     {
         try {
+
+
             // Chamamos a service passando o modelo e apenas os dados validados
             ProjectService::updateProject($id, $request->validated());
 
