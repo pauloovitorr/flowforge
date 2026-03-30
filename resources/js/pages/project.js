@@ -97,8 +97,8 @@ function abrirModalProjeto() {
         title: "Novo Projeto",
         html: `
             <div class="text-left">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Projeto</label>
-                <input type="text" id="project-name" class="w-full p-2 border border-gray-300 rounded-md outline-none focus:border-zinc-900" placeholder="Ex: Meu App">
+                <label class="block text-sm font-medium text-gray-700 mb-1" style="text-align: start;">Nome do Projeto</label>
+                <input type="text" id="project-name" class="w-full p-2 border border-gray-300 rounded-md outline-none  focus:border-cyan-500" placeholder="Ex: Meu App">
             </div>
         `,
         showCancelButton: true,
@@ -168,17 +168,18 @@ function editarProjeto(id, nomeAtual) {
         html: `
             <div class="mb-4 text-left">
                 <label class="block text-sm font-medium text-gray-700 mb-1" style="text-align: start;">Nome do Projeto</label>
-                <input type="text" id="edit-project-name" class="w-full p-2 border border-gray-300 rounded-md outline-none focus:border-zinc-900" value="${nomeAtual}">
+                <input type="text" id="edit-project-name" class="w-full p-2 border border-gray-300 rounded-md outline-none  focus:border-cyan-500" value="${nomeAtual}">
             </div>
 
             <div class="flex items-center gap-2">
+            <label for="generate_key" class="block text-sm font-medium text-gray-700 cursor-pointer">
+                    Deseja gerar outra chave de API?
+                </label>
                 <input type="checkbox" name="generate_key" id="generate_key"
                     class="w-4 h-4 rounded-sm border-gray-300 text-cyan-500 
                            focus:ring-cyan-500 focus:ring-offset-1 focus:ring-2 
                            transition-all duration-200 cursor-pointer">
-                <label for="generate_key" class="block text-sm font-medium text-gray-700 cursor-pointer">
-                    Deseja gerar outra chave de API?
-                </label>
+                
             </div>
         `,
         showCancelButton: true,
