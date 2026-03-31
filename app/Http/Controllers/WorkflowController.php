@@ -36,7 +36,7 @@ class WorkflowController extends Controller
      */
     public function store(StoreWorkflowRequest $request)
     {
-        //
+        dd($request);
     }
 
     /**

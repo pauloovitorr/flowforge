@@ -27,20 +27,20 @@
 
 
         <div class="bg-white border border-zinc-200 rounded-xl shadow-sm">
-            <form id="form-workflow" class="p-6 space-y-6">
+            <form action="{{ route('workflow.store') }}" method="post" id="form-workflow" class="p-6 space-y-6">
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="flex flex-col gap-1">
-                        <label for="w-name" class="text-sm font-medium text-zinc-700">Nome do Workflow</label>
+                        <label for="w-name" class="text-sm font-medium text-zinc-700">Nome do Workflow <span class="text-red-600">*</span></label>
                         <input type="text" id="w-name" name="name"
                             class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
-                            placeholder="Ex: Automação de Boas-vindas">
+                            placeholder="Ex: Automação de Boas-vindas" required>
                     </div>
 
                     <div class="flex flex-col gap-1">
-                        <label for="project" class="text-sm font-medium text-zinc-700">Projeto</label>
-                        <select id="project" name="project" class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none focus:border-cyan-500 transition-all">
+                        <label for="project" class="text-sm font-medium text-zinc-700">Projeto <span class="text-red-600">*</span></label>
+                        <select id="project" name="project" class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none focus:border-cyan-500 transition-all" required> 
                             <option value=""></option>
                             @foreach($projects as $project)
                                 <option value="{{ $project->id }}">{{ $project->name }}</option>
@@ -51,16 +51,16 @@
             
                     <div class="flex flex-col gap-1">
                         <label for="w-event" class="text-sm font-medium text-zinc-700">Evento de Gatilho
-                            (Trigger)</label>
+                            (Trigger) <span class="text-red-600">*</span></label>
                         <input type="text" id="w-event" name="trigger_event"
                             class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
-                            placeholder="Ex: user.registered">
+                            placeholder="Ex: user.registered" required>
                     </div>
 
                     <div class="flex flex-col gap-1">
-                        <label for="w-status" class="text-sm font-medium text-zinc-700">Status</label>
+                        <label for="w-status" class="text-sm font-medium text-zinc-700">Status <span class="text-red-600">*</span></label>
                         <select id="w-status" name="status"
-                            class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none focus:border-cyan-500 transition-all">
+                            class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none focus:border-cyan-500 transition-all" required>
                             <option value="active">Ativo</option>
                             <option value="inactive">Inativo</option>
                         </select>
