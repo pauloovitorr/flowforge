@@ -17,7 +17,7 @@ class ProjectController extends Controller
     {
 
         $id_user = Auth::id();
-        $projects = Project::where('user_id', $id_user )->orderBy('created_at', 'desc')->get();
+        $projects = Project::where('user_id', $id_user)->orderBy('created_at', 'desc')->get();
 
         return view('project.index')->with('projects', $projects);
 
@@ -37,23 +37,20 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request)
     {
         try {
-
-      
-
             // Tenta executar a lógica da Service
             ProjectService::addProject($request->validated());
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Projeto criado com sucesso!',
-            ], 201);
+            ], 201, [], JSON_UNESCAPED_UNICODE);
 
         } catch (\Exception $e) {
 
             return response()->json([
                 'status' => 'error',
                 'message' => 'Não foi possível criar o projeto. Tente novamente mais tarde.',
-            ], 500);
+            ], 500 , [], JSON_UNESCAPED_UNICODE);
         }
     }
 
@@ -79,7 +76,6 @@ class ProjectController extends Controller
     public function update(UpdateProjectRequest $request, $id)
     {
         try {
-
 
             // Chamamos a service passando o modelo e apenas os dados validados
             ProjectService::updateProject($id, $request->validated());

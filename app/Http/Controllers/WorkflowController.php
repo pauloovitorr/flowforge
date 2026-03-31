@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Service\WorkflowService;
 use App\Models\Project;
 use App\Models\Workflow;
 use App\Http\Controllers\Controller;
@@ -36,7 +37,23 @@ class WorkflowController extends Controller
      */
     public function store(StoreWorkflowRequest $request)
     {
-        dd($request);
+        try {    
+
+            WorkflowService::addWorkflow($request->validated());
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Workflow criado com sucesso!',
+            ], 201, [], JSON_UNESCAPED_UNICODE);
+
+            
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Não foi possível criar o workflow. Tente novamente mais tarde.',
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
     }
 
     /**

@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Workflow extends Model
 {
-    //
+   protected $fillable = ['name', 'project_id', 'trigger_event', 'status', 'description'];
 }
