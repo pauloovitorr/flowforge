@@ -6,23 +6,25 @@
 
     @if ($errors->any())
         <script>
-            
+
             document.addEventListener('DOMContentLoaded', function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Ops! Verifique os dados',
                     html: `
-                        <ul style="text-align: center;">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    `,
-                    confirmButtonColor: '#18181b', 
+                                    <ul style="text-align: center;">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                `,
+                    confirmButtonColor: '#18181b',
                 });
             });
         </script>
     @endif
+
+
 
     <div class="w-full grid grid-cols-1">
         <x-sistema.page-presentation icon="network" page="Novo Workflow">

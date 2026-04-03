@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Service\WorkflowService;
-use App\Models\Project;
-use App\Models\Workflow;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreWorkflowRequest;
 use App\Http\Requests\UpdateWorkflowRequest;
+use App\Models\Project;
+use App\Models\Workflow;
 use Illuminate\Support\Facades\Auth;
 
 class WorkflowController extends Controller
@@ -17,7 +16,10 @@ class WorkflowController extends Controller
      */
     public function index()
     {
-        return view('workflow.index');
+        $id_user = Auth::id();
+        $workflows = Workflow::where('user_id', $id_user)->orderBy('created_at', 'desc')->get();
+
+        return view('workflow.index')->with('workflows', $workflows);
     }
 
     /**
@@ -29,7 +31,7 @@ class WorkflowController extends Controller
 
         $projects = Project::where('user_id', $id_user)->select(['id', 'name'])->get();
 
-         return view('workflow.create')->with('projects', $projects);
+        return view('workflow.create')->with('projects', $projects);
     }
 
     /**
@@ -37,22 +39,17 @@ class WorkflowController extends Controller
      */
     public function store(StoreWorkflowRequest $request)
     {
-        try {    
+        try {
 
             WorkflowService::addWorkflow($request->validated());
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Workflow criado com sucesso!',
-            ], 201, [], JSON_UNESCAPED_UNICODE);
+            return redirect()->route('workflow.index')->with('success', 'Workflow criado com sucesso!');
 
-            
         } catch (\Exception $e) {
 
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Não foi possível criar o workflow. Tente novamente mais tarde.',
-            ], 500, [], JSON_UNESCAPED_UNICODE);
+            return redirect()->back()
+                ->with('error', 'Não foi possível criar o workflow. Tente novamente mais tarde.')
+                ->withInput();
         }
     }
 

@@ -12,4 +12,9 @@ class Project extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function workflows()
+    {
+        return $this->hasMany(Workflow::class, 'project_id');
+    }
 }

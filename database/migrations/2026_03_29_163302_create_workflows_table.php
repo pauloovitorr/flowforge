@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('project_id')->constrained('projects', 'id');
+            $table->foreignId('user_id')->constrained('users', 'id');
             $table->string('trigger_event');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->string('description')->nullable();
