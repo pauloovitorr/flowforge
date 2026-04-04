@@ -33,7 +33,8 @@
 
     <div class="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
         @forelse ($workflows as $workflow)
-            <div class="workflow bg-white border border-gray-200 rounded-xl shadow-sm p-5 flex flex-col justify-between group"       data-id="{{ $workflow->id }}">
+            <div class="workflow bg-white border border-gray-200 rounded-xl shadow-sm p-5 flex flex-col justify-between group"
+                data-id="{{ $workflow->id }}">
                 <div>
                     <div class="flex justify-between items-start mb-3">
                         <div class="truncate">
@@ -60,10 +61,12 @@
                         <div class="flex items-center gap-2">
 
                             <div class="flex gap-1 bg-zinc-50 p-1 rounded-lg border border-zinc-100">
-                                <button title="Editar"
-                                    class="btn-editar p-1.5 hover:bg-white hover:shadow-sm rounded-md text-zinc-600 hover:text-gray-900 transition-all">
-                                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
-                                </button>
+                                <a href="{{ route('workflow.edit', [$workflow->id]) }}">
+                                    <button title="Editar"
+                                        class="btn-editar p-1.5 hover:bg-white hover:shadow-sm rounded-md text-zinc-600 hover:text-gray-900 transition-all">
+                                        <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </a>
                                 <button title="Excluir"
                                     class="btn-excluir p-1.5 hover:bg-white hover:shadow-sm rounded-md text-zinc-600 hover:text-red-600 transition-all">
                                     <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
@@ -86,8 +89,8 @@
                                 Event</span>
                             <div class="flex justify-between items-center">
                                 <code class="text-xs text-gray-600 font-mono truncate pr-6">
-                                                                                    {{ $workflow->trigger_event }}
-                                                                                </code>
+                                                                                        {{ $workflow->trigger_event }}
+                                                                                    </code>
 
                                 <span
                                     class="px-2 py-0.5 rounded text-[10px] font-bold uppercase {{ $workflow->status === 'active' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600' }}">

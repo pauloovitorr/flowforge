@@ -69,7 +69,12 @@ class WorkflowController extends Controller
      */
     public function edit(Workflow $workflow)
     {
-        //
+        $workflow->load('project:id,name');
+
+        $id_user = Auth::id();
+        $projects = Project::where('user_id', $id_user)->select(['id', 'name'])->get();
+
+        return view('workflow.edit')->with(['workflow' => $workflow, 'projects' => $projects]);
     }
 
     /**
@@ -83,10 +88,10 @@ class WorkflowController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy($workflow)
     {
         try {
-            $workflow = Workflow::where('id', $id)
+            $workflow = Workflow::where('id', $workflow)
                 ->where('user_id', Auth::id())
                 ->firstOrFail();
 
