@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreWorkflowRequest extends FormRequest
 {
@@ -24,7 +25,11 @@ class StoreWorkflowRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'project_id' => 'required|integer|exists:projects,id',
+            'project_id' => [ 'required', 'integer',
+                Rule::exists('projects', 'id')->where(function ($query) {
+                    $query->where('user_id', auth()->id());
+                }),
+            ],
             'user_id' => 'required|integer|exists:users,id',
             'trigger_event' => 'required|string|max:100',
             'status' => 'required|in:active,inactive',

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('workflows', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('project_id')->constrained('projects', 'id');
-            $table->foreignId('user_id')->constrained('users', 'id');
+            $table->foreignId('project_id')->constrained('projects', 'id')->cascadeOnDelete();;
+            $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete();;
             $table->string('trigger_event');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->string('description')->nullable();

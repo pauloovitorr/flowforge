@@ -7,6 +7,7 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ProjectController extends Controller
 {
@@ -37,7 +38,7 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request)
     {
         try {
-            // Tenta executar a lógica da Service
+
             ProjectService::addProject($request->validated());
 
             return response()->json([
@@ -47,10 +48,12 @@ class ProjectController extends Controller
 
         } catch (\Exception $e) {
 
+            Log::error('Erro ao criar projeto: '.$e->getMessage());
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Não foi possível criar o projeto. Tente novamente mais tarde.',
-            ], 500 , [], JSON_UNESCAPED_UNICODE);
+            ], 500, [], JSON_UNESCAPED_UNICODE);
         }
     }
 
@@ -77,13 +80,15 @@ class ProjectController extends Controller
     {
         try {
 
-            // Chamamos a service passando o modelo e apenas os dados validados
             ProjectService::updateProject($id, $request->validated());
 
             return response()->json([
                 'message' => 'Projeto atualizado com sucesso!',
             ]);
         } catch (\Exception $e) {
+
+            Log::error('Erro ao atualizar projeto: '.$e->getMessage());
+
             return response()->json([
                 'message' => 'Erro ao atualizar o projeto.',
                 'error' => $e->getMessage(),
@@ -97,7 +102,9 @@ class ProjectController extends Controller
     public function destroy($id)
     {
         try {
-            $project = Project::findOrFail($id);
+            $project = Project::where('id', $id)
+                ->where('user_id', Auth::id())
+                ->firstOrFail();
             $project->delete();
 
             return response()->json([
@@ -105,6 +112,9 @@ class ProjectController extends Controller
                 'message' => 'Projeto excluído permanentemente.',
             ]);
         } catch (\Exception $e) {
+
+            Log::error('Erro ao excluir o projeto: '.$e->getMessage());
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Erro ao excluir o projeto.',

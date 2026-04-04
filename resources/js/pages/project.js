@@ -19,7 +19,7 @@ $(function () {
 
         Swal.fire({
             title: "Tem certeza?",
-            text: "Esta ação não poderá ser revertida!",
+            text: "Esta ação irá excluir o projeto e tudo ligado a ele. Ação não pode ser revertida!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#ef4444",
@@ -64,7 +64,7 @@ $(function () {
                     error: function (xhr) {
                         Swal.fire(
                             "Erro!",
-                            "Não foi possível excluir.",
+                            xhr.responseJSON.message,
                             "error",
                         );
                     },
@@ -154,8 +154,8 @@ function salvarProjeto(nome) {
 
             $("#btn-add-project").prop("disabled", false);
         },
-        error: function () {
-            Swal.fire("Erro!", "Falha ao salvar.", "error");
+        error: function (xhr) {
+            Swal.fire("Erro!", xhr.responseJSON.message, "error");
 
             $("#btn-add-project").prop("disabled", false);
         },
@@ -225,12 +225,12 @@ function atualizarProjeto(id, novoNome, gerarKey) {
             generate_key: gerarKey,
         },
         success: function (response) {
-            Swal.fire("Sucesso!", "Projeto atualizado.", "success").then(() =>
+            Swal.fire("Sucesso!", response.message, "success").then(() =>
                 location.reload(),
             );
         },
-        error: function () {
-            Swal.fire("Erro!", "Não foi possível atualizar.", "error");
+        error: function (xhr) {
+            Swal.fire("Erro!", xhr.responseJSON.message, "error");
         },
     });
 }

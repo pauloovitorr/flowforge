@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateWorkflowRequest;
 use App\Models\Project;
 use App\Models\Workflow;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class WorkflowController extends Controller
 {
@@ -17,7 +18,7 @@ class WorkflowController extends Controller
     public function index()
     {
         $id_user = Auth::id();
-        $workflows = Workflow::where('user_id', $id_user)->orderBy('created_at', 'desc')->get();
+        $workflows = Workflow::with('project:id,name')->where('user_id', $id_user)->orderBy('created_at', 'desc')->get();
 
         return view('workflow.index')->with('workflows', $workflows);
     }
@@ -46,6 +47,8 @@ class WorkflowController extends Controller
             return redirect()->route('workflow.index')->with('success', 'Workflow criado com sucesso!');
 
         } catch (\Exception $e) {
+
+            Log::error('Erro ao criar workflow: '.$e->getMessage());
 
             return redirect()->back()
                 ->with('error', 'Não foi possível criar o workflow. Tente novamente mais tarde.')
@@ -80,8 +83,27 @@ class WorkflowController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Workflow $workflow)
+    public function destroy($id)
     {
-        //
+        try {
+            $workflow = Workflow::where('id', $id)
+                ->where('user_id', Auth::id())
+                ->firstOrFail();
+
+            $workflow->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Workflow excluído permanentemente.',
+            ]);
+        } catch (\Exception $e) {
+
+            Log::error('Erro ao excluir o workflow: '.$e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro ao excluir o workflow.',
+            ], 500);
+        }
     }
 }

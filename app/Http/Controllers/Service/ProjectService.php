@@ -19,7 +19,7 @@ class ProjectService
             Project::create($data);
 
         } catch (Exception $e) {
-            Log::error('Erro ao criar projeto: '.$e->getMessage());
+            
             throw $e;
         }
 
@@ -30,15 +30,13 @@ class ProjectService
         try {
             $project = Project::find($id);
 
-           
-
-            if (! empty($data['generate_key']) &&  $data['generate_key'] == true  ) {
+            if (! empty($data['generate_key']) && $data['generate_key'] == true) {
                 $data['api_key'] = Str::random(32);
             }
 
             $project->update($data);
         } catch (Exception $e) {
-            Log::error('Erro ao atualizar projeto ID '.$project->id.': '.$e->getMessage());
+            
             throw $e;
         }
     }
