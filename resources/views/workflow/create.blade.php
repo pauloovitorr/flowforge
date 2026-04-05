@@ -12,12 +12,12 @@
                     icon: 'error',
                     title: 'Ops! Verifique os dados',
                     html: `
-                                    <ul style="text-align: center;">
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                `,
+                                        <ul style="text-align: center;">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    `,
                     confirmButtonColor: '#18181b',
                 });
             });
@@ -110,10 +110,11 @@
                 </div>
 
                 <div class="pt-6 flex justify-end items-center gap-4">
-                    <button type="button" onclick="window.history.back()"
-                        class="text-sm font-medium text-zinc-600 hover:text-zinc-900">
-                        Cancelar
-                    </button>
+                    <a href="{{ route('workflow.index') }}">
+                        <button type="button" class="text-sm font-medium text-zinc-600 hover:text-zinc-900">
+                            Cancelar
+                        </button>
+                    </a>
                     <button type="submit" id="btn-save-workflow"
                         class="px-6 py-2.5 text-sm font-semibold text-white bg-zinc-900 rounded-lg hover:bg-black transition-all shadow-sm">
                         Salvar Workflow

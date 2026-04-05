@@ -113,10 +113,12 @@
                 </div>
 
                 <div class="pt-6 flex justify-end items-center gap-4">
-                    <button type="button" onclick="window.history.back()"
+                    <a href="{{ route('workflow.index') }}">
+                        <button type="button"
                         class="text-sm font-medium text-zinc-600 hover:text-zinc-900">
                         Cancelar
                     </button>
+                    </a>
                     <button type="submit" id="btn-save-workflow"
                         class="px-6 py-2.5 text-sm font-semibold text-white bg-zinc-900 rounded-lg hover:bg-black transition-all shadow-sm">
                         Salvar Workflow
