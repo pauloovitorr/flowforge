@@ -80,9 +80,22 @@ class WorkflowController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateWorkflowRequest $request, Workflow $workflow)
+    public function update(UpdateWorkflowRequest $request, $workflow)
     {
-        //
+        try {
+
+            WorkflowService::updateProject($workflow, $request->validated());
+
+            return redirect()->route('workflow.index')->with('success', 'Workflow atualizado com sucesso!');
+
+        } catch (\Exception $e) {
+            Log::error('Erro ao atualizar o workflow: '.$e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro ao atualizar o workflow.',
+            ], 500);
+        }
     }
 
     /**

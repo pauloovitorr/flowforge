@@ -14,6 +14,8 @@ Route::controller(WorkflowController::class)
 
         Route::get('/workflow/{workflow}/edit', 'edit')->name('workflow.edit');
 
+        Route::put('/workflow/{workflow}', 'update')->name('workflow.update');
+
         Route::post('/workflow', 'store')->name('workflow.store');
 
         Route::delete('/workflow/{workflow}', 'destroy')->name('workflow.destroy');

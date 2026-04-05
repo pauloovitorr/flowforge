@@ -48,8 +48,10 @@
 
 
         <div class="bg-white border border-zinc-200 rounded-xl shadow-sm">
-            <form action="{{ route('workflow.store') }}" method="post" id="form-workflow" class="p-6 space-y-6">
+            <form action="{{ route('workflow.update', [$workflow->id]) }}" method="post" id="form-workflow" class="p-6 space-y-6">
                 @csrf
+
+                @method('PUT')
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Campo Nome --}}
