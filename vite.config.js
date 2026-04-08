@@ -10,6 +10,7 @@ export default defineConfig({
                 "resources/js/app.js",
                 "resources/js/pages/project.js",
                 "resources/js/pages/workflow.js",
+                "resources/js/pages/workflow_action.js",
             ],
             refresh: true,
         }),
