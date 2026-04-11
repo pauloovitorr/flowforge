@@ -51,7 +51,7 @@ class WorkflowController extends Controller
             Log::error('Erro ao criar workflow: '.$e->getMessage());
 
             return redirect()->back()
-                ->withErrors('error', 'Não foi possível criar o workflow. Tente novamente mais tarde.')
+                ->withErrors(['error' => 'Não foi possível criar o workflow. Tente novamente mais tarde.'])
                 ->withInput();
         }
     }
@@ -92,7 +92,7 @@ class WorkflowController extends Controller
             Log::error('Erro ao atualizar o workflow: '.$e->getMessage());
 
             return redirect()->back()
-                ->withErrors('error', 'Erro ao atualizar o workflow.')
+                ->withErrors(['error' => 'Erro ao atualizar o workflow.'])
                 ->withInput();
         }
     }

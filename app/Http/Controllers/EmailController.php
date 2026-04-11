@@ -6,6 +6,7 @@ use App\Http\Controllers\Service\EmailService;
 use App\Http\Requests\StoreEmailRequest;
 use App\Http\Requests\UpdateEmailRequest;
 use App\Models\Email;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class EmailController extends Controller
@@ -15,7 +16,9 @@ class EmailController extends Controller
      */
     public function index()
     {
-        return view('email.index');
+        $emails = Email::where('user_id', Auth::id())->get();
+
+        return view('email.index')->with('emails', $emails);
     }
 
     /**
@@ -43,7 +46,7 @@ class EmailController extends Controller
             Log::error('Erro ao criar template de email: '.$e->getMessage());
 
             return redirect()->back()
-                ->withErrors('error', 'Não foi possível criar o workflow. Tente novamente mais tarde.')
+                ->withErrors(['error' => 'Não foi possível criar o template. Tente novamente mais tarde.'])
                 ->withInput();
         }
     }
