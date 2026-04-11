@@ -2,11 +2,11 @@
 
 
 
-    <x-sistema.page-presentation icon="bolt" page="Lista de Actions">
+    <x-sistema.page-presentation icon="mail" page="Lista de Templates de E-mails">
 
         <x-slot:actions>
-            <a href="{{ route('workflow_action.create') }}">
-                <button 
+            <a href="{{ route('email.create') }}">
+                <button
                     class="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-md transition-all duration-200 shadow-sm active:scale-95">
                     <i data-lucide="plus" class="w-4 h-4 text-white"></i>
                     Adicionar

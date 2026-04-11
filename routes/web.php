@@ -26,3 +26,5 @@ require __DIR__.'/sistema/project.php';
 require __DIR__. '/sistema/workflow.php';
 
 require __DIR__. '/sistema/actions.php';
+
+require __DIR__. '/sistema/email.php';

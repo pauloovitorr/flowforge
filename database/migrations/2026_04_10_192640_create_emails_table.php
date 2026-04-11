@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('workflows', function (Blueprint $table) {
+        Schema::create('emails', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('project_id')->constrained('projects', 'id')->cascadeOnDelete();;
             $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete();
-            $table->string('trigger_event');
-            $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->string('description')->nullable();
+            $table->string('name');
+            $table->text('body');
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('workflows');
+        Schema::dropIfExists('emails');
     }
 };
