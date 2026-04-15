@@ -100,7 +100,7 @@
         <!-- Quill JS -->
         <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
-        @vite('resources/js/pages/email.js')
+        @vite('resources/js/pages/email-create.js')
     @endpush
 
 </x-layouts.sistema>

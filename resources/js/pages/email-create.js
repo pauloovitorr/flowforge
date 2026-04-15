@@ -1,4 +1,5 @@
 $(function () {
+
     // Inicializa o Quill
     const quill = new Quill("#quill-editor", {
         theme: "snow",

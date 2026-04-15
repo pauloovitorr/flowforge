@@ -27,7 +27,7 @@
 
     <div class="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
         @forelse ($emails as $email)
-            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 flex flex-col justify-between group"
+            <div class="container-template bg-white border border-gray-200 rounded-xl shadow-sm p-5 flex flex-col justify-between group"
                 data-id="{{ $email->id }}">
                 <div>
                     <div class="flex justify-between items-start mb-3">
@@ -57,15 +57,10 @@
                                         <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                                     </button>
                                 </a>
-                                <form action="{{ route('email.destroy', $email->id) }}" method="POST"
-                                    class="inline delete-form">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" title="Excluir"
-                                        class="btn-excluir-email p-1.5 hover:bg-white hover:shadow-sm rounded-md text-zinc-600 hover:text-red-600 transition-all">
-                                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                                    </button>
-                                </form>
+                                <button title="Excluir"
+                                    class="btn-excluir p-1.5 hover:bg-white hover:shadow-sm rounded-md text-zinc-600 hover:text-red-600 transition-all">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -79,8 +74,8 @@
                             </span>
                             <div class="flex justify-between items-center">
                                 <code class="text-xs text-gray-600 font-mono truncate pr-6">
-                                     {{ strip_tags($email->body) ?? 'Template sem conteúdo definido.' }}
-                                    </code>
+                                         {{ strip_tags($email->body) ?? 'Template sem conteúdo definido.' }}
+                                        </code>
 
                                 <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-100 text-blue-600">
                                     Template
@@ -103,29 +98,7 @@
     </div>
 
     @push('script')
-        <script>
-            // Exemplo de lógica para o botão de excluir
-            document.querySelectorAll('.btn-excluir-email').forEach(button => {
-                button.addEventListener('click', function () {
-                    const form = this.closest('form');
-                    Swal.fire({
-                        title: 'Excluir template?',
-                        text: "Esta ação não pode ser desfeita.",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#18181b',
-                        cancelButtonColor: '#f44336',
-                        confirmButtonText: 'Sim, excluir',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
-                    });
-                });
-            });
-        </script>
-        @vite('resources/js/pages/workflow.js')
+        @vite('resources/js/pages/email-index.js')
     @endpush
 
 </x-layouts.sistema>

@@ -78,8 +78,29 @@ class EmailController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Email $email)
+    public function destroy($email)
     {
-        //
+        {
+        try {
+            $email = Email::where('id', $email)
+                ->where('user_id', Auth::id())
+                ->firstOrFail();
+
+            $email->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Template de email excluído permanentemente.',
+            ]);
+        } catch (\Exception $e) {
+
+            Log::error('Erro ao excluir o Template de email: '.$e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro ao excluir o Template de email.',
+            ], 500);
+        }
+    }
     }
 }
