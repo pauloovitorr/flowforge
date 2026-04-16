@@ -42,11 +42,7 @@
                                 </p>
                             </div>
 
-                            <div class="flex gap-2 items-center justify-between">
-                                <p class="text-[11px] text-gray-400 font-medium">Autor:
-                                    <span class="text-gray-500">{{ $email->user->name ?? 'Sistema' }}</span>
-                                </p>
-                            </div>
+                        
                         </div>
 
                         <div class="flex items-center gap-2">

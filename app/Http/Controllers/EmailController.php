@@ -62,9 +62,29 @@ class EmailController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Email $email)
+    public function edit($email)
     {
-        //
+        
+        try {
+            $email = Email::where('id', $email)
+                ->where('user_id', Auth::id())
+                ->firstOrFail();
+
+            return view('email.edit')->with('email', $email);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Template de email excluído permanentemente.',
+            ]);
+        } catch (\Exception $e) {
+
+            Log::error('Erro ao excluir o Template de email: '.$e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro ao excluir o Template de email.',
+            ], 500);
+        
     }
 
     /**
