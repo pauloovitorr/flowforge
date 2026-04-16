@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Service;
 use App\Models\Email;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class EmailService
 {
@@ -18,26 +16,25 @@ class EmailService
             Email::create($data);
 
         } catch (Exception $e) {
-            
+
             throw $e;
         }
 
     }
 
-    // public static function updateEmail($id, array $data)
-    // {
-    //     try {
-    //         $Email = Email::find($id);
+    public static function updateEmail($id, array $data)
+    {
+        try {
 
-    //         if (! empty($data['generate_key']) && $data['generate_key'] == true) {
-    //             $data['api_key'] = Str::random(32);
-    //         }
+            $email = Email::where('id', $id)
+                ->where('user_id', Auth::id())
+                ->firstOrFail();
 
-    //         $Email->update($data);
-    //     } catch (Exception $e) {
-            
-    //         throw $e;
-    //     }
-    // }
+            $email->update($data);
 
+        } catch (Exception $e) {
+
+            throw $e;
+        }
+    }
 }

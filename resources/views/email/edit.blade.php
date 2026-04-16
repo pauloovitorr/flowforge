@@ -5,7 +5,7 @@
         <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 
         <style>
-            .ql-toolbar.ql-snow{
+            .ql-toolbar.ql-snow {
                 border-radius: 8px;
             }
         </style>
@@ -18,12 +18,12 @@
                     icon: 'error',
                     title: 'Ops! Verifique os dados',
                     html: `
-                        <ul style="text-align: center;">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    `,
+                            <ul style="text-align: center;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        `,
                     confirmButtonColor: '#18181b',
                 });
             });
@@ -49,36 +49,43 @@
         </x-sistema.page-presentation>
 
         <div class="bg-white border border-zinc-200 rounded-xl shadow-sm">
-            <form action="{{ route('email.store') }}" method="post" id="form-email-template" class="p-6 space-y-6">
+            <form action="{{ route('email.update', $email->id) }}" method="post" id="form-email-template"
+                class="p-6 space-y-6">
                 @csrf
+                @method('PUT')
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Campo Nome --}}
                     <div class="flex flex-col gap-1">
-                        <label for="template-name" class="text-sm font-medium text-zinc-700">Nome do Template <span class="text-red-600">*</span></label>
-                        <input type="text" id="template-name" name="name" value="{{ old('name') }}"
+                        <label for="template-name" class="text-sm font-medium text-zinc-700">Nome do Template <span
+                                class="text-red-600">*</span></label>
+                        <input type="text" id="template-name" name="name" value="{{ old('name', $email->name) }}"
                             class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
                             placeholder="Ex: Boas-vindas - Cliente Novo" required>
                     </div>
 
                     {{-- Campo Status --}}
                     <div class="flex flex-col gap-1">
-                        <label for="template-status" class="text-sm font-medium text-zinc-700">Status <span class="text-red-600">*</span></label>
+                        <label for="template-status" class="text-sm font-medium text-zinc-700">Status <span
+                                class="text-red-600">*</span></label>
                         <select id="template-status" name="status"
                             class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
                             required>
-                            <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Ativo</option>
-                            <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inativo</option>
+                            <option value="active" {{ old('status', $email->status) == 'active' ? 'selected' : '' }}>Ativo
+                            </option>
+                            <option value="inactive" {{ old('status', $email->status) == 'inactive' ? 'selected' : '' }}>
+                                Inativo</option>
                         </select>
                     </div>
                 </div>
 
-
                 {{-- Campo Body - Quill Editor --}}
                 <div class="flex flex-col gap-1">
-                    <label class="text-sm font-medium text-zinc-700">Conteúdo do Email (Body) <span class="text-red-600">*</span></label>
-                    <input type="hidden" name="body" id="template-body" value="{{ old('body') }}">
-                    <div id="quill-editor" class="bg-white border border-zinc-300 rounded-lg min-h-[300px]"></div>
+                    <label class="text-sm font-medium text-zinc-700">Conteúdo do Email (Body) <span
+                            class="text-red-600">*</span></label>
+                    <input type="hidden" name="body" id="template-body" value="{{ old('body', $email->body) }}">
+
+                    <div id="quill-editor" class="bg-white border border-zinc-300 rounded-lg min-h-[300px]">{!! old('body', $email->body) !!}</div>
                 </div>
 
                 <div class="pt-6 flex justify-end items-center gap-4">
@@ -89,11 +96,13 @@
                     </a>
                     <button type="submit" id="btn-save-template"
                         class="px-6 py-2.5 text-sm font-semibold text-white bg-zinc-900 rounded-lg hover:bg-black transition-all shadow-sm">
-                        Salvar Template
+                        Atualizar Template
                     </button>
                 </div>
             </form>
         </div>
+
+
     </div>
 
     @push('script')

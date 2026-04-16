@@ -25,6 +25,7 @@ class StoreEmailRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'body' => 'required|string|min:20',
+            'user_id' => 'required|integer|exists:users,id',
         ];
     }
 
@@ -36,6 +37,15 @@ class StoreEmailRequest extends FormRequest
             'body.required' => 'O conteúdo do email (Body) é obrigatório.',
             'body.string' => 'O conteúdo deve ser um texto válido.',
             'body.min' => 'O conteúdo do email deve ter pelo menos :min caracteres (evite apenas tags vazias).',
+            'user_id.required' => 'O identificador do usuário é obrigatório.',
+            'user_id.exists' => 'O usuário informado não é válido.',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'user_id' => $this->user()?->id,
+        ]);
     }
 }

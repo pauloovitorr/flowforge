@@ -42,7 +42,7 @@
                                 </p>
                             </div>
 
-                        
+
                         </div>
 
                         <div class="flex items-center gap-2">
@@ -70,12 +70,14 @@
                             </span>
                             <div class="flex justify-between items-center">
                                 <code class="text-xs text-gray-600 font-mono truncate pr-6">
-                                         {{ strip_tags($email->body) ?? 'Template sem conteúdo definido.' }}
-                                        </code>
+                                                 {{ strip_tags($email->body) ?? 'Template sem conteúdo definido.' }}
+                                    </code>
 
-                                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-100 text-blue-600">
-                                    Template
+                                <span
+                                    class="px-2 py-0.5 rounded text-[10px] font-bold uppercase {{ $email->status === 'active' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600' }}">
+                                    {{ $email->status }}
                                 </span>
+
                             </div>
                         </div>
                     </div>

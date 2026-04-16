@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete();
             $table->string('name');
+            $table->enum('status', ['active','inactive']);
             $table->text('body');
             $table->timestamps();
         });
