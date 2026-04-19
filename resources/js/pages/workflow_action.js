@@ -9,17 +9,29 @@ $(function () {
     function switchType(type) {
         $typeInput.val(type);
 
-        $typeButtons.each(function() {
+        // Atualiza o estado visual dos botões
+        $typeButtons.each(function () {
             const $btn = $(this);
             $btn.attr("data-active", ($btn.data("type") === type).toString());
         });
 
-        $emailSection.toggleClass("hidden", type !== "email");
-        $apiSection.toggleClass("hidden", type !== "api");
+        const duration = 300;
+
+        if (type === "email") {
+            // Esconde a API e mostra o Email
+            $apiSection.fadeOut(duration, function () {
+                $emailSection.fadeIn(duration);
+            });
+        } else {
+            // Esconde o Email e mostra a API
+            $emailSection.fadeOut(duration, function () {
+                $apiSection.fadeIn(duration);
+            });
+        }
     }
 
     // Evento de clique nos botões de tipo
-    $typeButtons.on("click", function() {
+    $typeButtons.on("click", function () {
         switchType($(this).data("type"));
     });
 
@@ -29,14 +41,20 @@ $(function () {
 
     // ==================== Mapeamentos Dinâmicos ====================
 
-function createMappingRow($container, keyName = "", valueName = "", placeholder='', isRemovable = true) {
-    const removeBtnHtml = isRemovable 
-        ? `<button type="button" class="remove-row text-red-400 hover:text-red-600 p-2 transition-colors shrink-0">
+    function createMappingRow(
+        $container,
+        keyName = "",
+        valueName = "",
+        placeholder = "",
+        isRemovable = true,
+    ) {
+        const removeBtnHtml = isRemovable
+            ? `<button type="button" class="remove-row text-red-400 hover:text-red-600 p-2 transition-colors shrink-0">
                 <i data-lucide="trash-2" class="w-5 h-5"></i>
-           </button>` 
-        : `<div class="w-9"></div>`;
+           </button>`
+            : `<div class="w-9"></div>`;
 
-    const rowHtml = `
+        const rowHtml = `
         <div class="flex items-center gap-3 bg-zinc-50 p-3 rounded-xl border border-zinc-200 mb-2 w-full" style="display: none;">
             
             <div class="flex-1">
@@ -60,60 +78,51 @@ function createMappingRow($container, keyName = "", valueName = "", placeholder=
             </div>
         </div>`;
 
-    const $row = $(rowHtml);
+        const $row = $(rowHtml);
 
-    // Lógica de Fade Out com Remoção Real
-    if (isRemovable) {
-        $row.find(".remove-row").on("click", function() {
-            $row.fadeOut(300, function() {
-                $(this).remove(); // Remove do DOM após sumir
+        // Lógica de Fade Out com Remoção Real
+        if (isRemovable) {
+            $row.find(".remove-row").on("click", function () {
+                $row.fadeOut(300, function () {
+                    $(this).remove(); // Remove do DOM após sumir
+                });
             });
-        });
-    }
+        }
 
-    // Adiciona ao container e executa o Fade In
-    $container.append($row);
-    $row.fadeIn(300); 
-    
-    if (window.lucide) {
-        lucide.createIcons();
+        // Adiciona ao container e executa o Fade In
+        $container.append($row);
+        $row.fadeIn(300);
+
+        if (window.lucide) {
+            lucide.createIcons();
+        }
     }
-}
 
     // Email Mappings
-    const $emailMappingsContainer = $("#email-mappings");
-    $("#add-mapping-email").on("click", () => {
-        createMappingRow($emailMappingsContainer, "template_variables[]", "payload_paths[]", "payload.dado");
-    });
+    // const $emailMappingsContainer = $("#email-mappings");
+    // $("#add-mapping-email").on("click", () => {
+    //     createMappingRow($emailMappingsContainer, "template_variables[]", "payload_paths[]", "payload.dado");
+    // });
 
     // Headers
     const $headersContainer = $("#headers-container");
     $("#add-header").on("click", () => {
-        createMappingRow($headersContainer, "headers_keys[]", "headers_values[]", "Valor da variável fixa");
+        createMappingRow(
+            $headersContainer,
+            "headers_keys[]",
+            "headers_values[]",
+            "Valor da variável fixa",
+        );
     });
 
     // Body Fields
     const $bodyContainer = $("#body-mappings");
     $("#add-body-field").on("click", () => {
-        createMappingRow($bodyContainer, "body_keys[]", "body_values[]", "payload.dado");
+        createMappingRow(
+            $bodyContainer,
+            "body_keys[]",
+            "body_values[]",
+            "payload.dado",
+        );
     });
-
-    // Auth Mappings
-    const $authTypeSelect = $("#auth_type");
-    const $authConfigSection = $("#auth-config-section");
-
-    $('#token_auth').prop('disabled', true)
-    $('#token_auth').css('opacity', '0.3')
-
-    $authTypeSelect.on("change", function() {
-        if ($(this).val() === "none") {
-            $('#token_auth').prop('disabled', true)
-            $('#token_auth').css('opacity', '0.3')
-
-        } else {
-            $('#token_auth').prop('disabled', false)
-            $('#token_auth').css('opacity', '1')
-        }
-    });
-
 });

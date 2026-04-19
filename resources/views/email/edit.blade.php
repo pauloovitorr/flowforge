@@ -18,12 +18,12 @@
                     icon: 'error',
                     title: 'Ops! Verifique os dados',
                     html: `
-                                <ul style="text-align: center;">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            `,
+                                        <ul style="text-align: center;">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    `,
                     confirmButtonColor: '#18181b',
                 });
             });
@@ -48,6 +48,21 @@
 
         </x-sistema.page-presentation>
 
+        <div class="bg-blue-50  p-3 mb-5 rounded-lg text-sm text-blue-800">
+
+            <p class="mb-2"><strong>Personalização:</strong> Use chaves duplas para adicionar campos dinâmicos nos
+                inputs de Body e
+                destinatário do email.</p>
+
+            <code class="bg-white px-1 py-0.5 rounded border border-blue-200 text-blue-900">
+                            @{{ nome_do_cliente }}</code>
+            <span class="ml-1">será substituído pelo valor enviado no endpoint com a chave
+                nome_do_cliente.</span>
+
+            <p class="mt-2">Efetue o cadastro com <strong>ATENÇÃO!</strong></p>
+        </div>
+
+
         <div class="bg-white border border-zinc-200 rounded-xl shadow-sm">
             <form action="{{ route('email.update', $email->id) }}" method="post" id="form-email-template"
                 class="p-6 space-y-6">
@@ -55,18 +70,18 @@
                 @method('PUT')
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {{-- Campo Nome --}}
+                    {{-- Campo Assunto  --}}
                     <div class="flex flex-col gap-1">
-                        <label for="template-name" class="text-sm font-medium text-zinc-700">Nome do Template <span
+                        <label for="subject" class="text-sm font-medium text-zinc-700">Assunto do E-mail <span
                                 class="text-red-600">*</span></label>
-                        <input type="text" id="template-name" name="name" value="{{ old('name', $email->name) }}"
+                        <input type="text" id="subject" name="subject" value="{{ old('subject', $email->subject) }}"
                             class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
-                            placeholder="Ex: Boas-vindas - Cliente Novo" required>
+                            placeholder="Ex: Bem-vindo à nossa plataforma!" required>
                     </div>
 
                     {{-- Campo Status --}}
                     <div class="flex flex-col gap-1">
-                        <label for="template-status" class="text-sm font-medium text-zinc-700">Status <span
+                        <label for="template-status" class="text-sm font-medium text-zinc-700">Status do Template <span
                                 class="text-red-600">*</span></label>
                         <select id="template-status" name="status"
                             class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
@@ -79,23 +94,29 @@
                     </div>
                 </div>
 
+                {{-- Novo Campo: Variável do Destinatário --}}
+                <div class="flex flex-col gap-1">
+                    <label for="recipient" class="text-sm font-medium text-zinc-700">
+                        Variável do destinatário do E-mail <span class="text-red-600">* (Campo espera o nome da
+                            variável)</span>
+                    </label>
+                    <input type="text" id="recipient" name="recipient" value="{{ old('recipient', $email->recipient) }}"
+                        class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
+                        placeholder="Ex: @{{ email_cliente }}" required>
+                </div>
+
                 {{-- Campo Body - Quill Editor --}}
                 <div class="flex flex-col gap-1">
                     <label class="text-sm font-medium text-zinc-700">Conteúdo do Email (Body) <span
-                            class="text-red-600">*</span></label>
+                            class="text-red-600">* (Campo aceita variável utilizando o formato de máscara informado
+                            acima)</span></label>
 
-                    <div class="bg-blue-50  p-3 mb-2 rounded-lg text-sm text-blue-800">
-                        <p><strong>Dica de Personalização:</strong> Use chaves duplas para adicionar campos dinâmicos.
-                        </p>
-                        <code class="bg-white px-1 py-0.5 rounded border border-blue-200 text-blue-900">
-                            @{{ nome_do_cliente }}</code>
-                        <span class="ml-1">será substituído pelo valor enviado no endpoint com a chave
-                            nome_do_cliente.</span>
-                    </div>
+                   
 
-                    <input type="hidden" name="body" id="template-body" value="{{ old('body', $email->body) }}">
+                    <input type="hidden" name="body" id="template-body" value="{{ old('body', $email->body) }}" required>
                     <div id="quill-editor" class="bg-white border border-zinc-300 rounded-lg min-h-[300px]">
-                        {!! old('body', $email->body) !!}</div>
+                        {!! old('body', $email->body) !!}
+                    </div>
                 </div>
 
                 <div class="pt-6 flex justify-end items-center gap-4">

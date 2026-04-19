@@ -23,27 +23,35 @@ class UpdateEmailRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'status' => 'required|string|in:active,inactive',
+            'subject' => 'required|string|max:255',
+            'recipient' => 'required|string|max:255|regex:/^\{\{.*\}\}$/',
             'body' => 'required|string|min:20',
             'user_id' => 'required|integer|exists:users,id',
+            'status' => 'required|in:active,inactive',
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
-            'name.required' => 'O nome do template é obrigatório.',
-            'name.string' => 'O nome deve ser um texto válido.',
+            'subject.required' => 'O assunto do e-mail é obrigatório.',
+            'subject.string' => 'O assunto deve ser um texto válido.',
+            'subject.max' => 'O assunto não pode ultrapassar 255 caracteres.',
 
-            'status.required' => 'O status é obrigatório.',
-            'status.in' => 'O status deve ser "active" ou "inactive".',
+            'recipient.required' => 'A variável do destinatário é obrigatória.',
+            'recipient.string' => 'O destinatário deve ser um texto válido.',
+            'recipient.max' => 'A variável não pode ultrapassar 255 caracteres.',
+            'recipient.regex' => 'O formato da variável deve ser {{ nome_da_variavel }}.',
 
-            'body.required' => 'O conteúdo do email (Body) é obrigatório.',
+            'body.required' => 'O conteúdo do e-mail (Body) é obrigatório.',
             'body.string' => 'O conteúdo deve ser um texto válido.',
-            'body.min' => 'O conteúdo do email deve ter pelo menos :min caracteres.',
+            'body.min' => 'O conteúdo do e-mail deve ter pelo menos :min caracteres.',
+
             'user_id.required' => 'O identificador do usuário é obrigatório.',
             'user_id.exists' => 'O usuário informado não é válido.',
+
+            'status.required' => 'O status é obrigatório.',
+            'status.in' => 'O status selecionado deve ser "active" ou "inactive".',
         ];
     }
 

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\WorkflowActions;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreWorkflowActionsRequest;
 use App\Http\Requests\UpdateWorkflowActionsRequest;
+use App\Models\Email;
+use App\Models\Workflow;
+use App\Models\WorkflowActions;
+use Illuminate\Support\Facades\Auth;
 
 class WorkflowActionsController extends Controller
 {
@@ -22,7 +24,13 @@ class WorkflowActionsController extends Controller
      */
     public function create()
     {
-        return view('workflow-actions.create');
+        $id_user = Auth::id();
+
+        $workflows = Workflow::where('user_id', $id_user)->select(['id', 'name'])->get();
+
+        $emails = Email::where('user_id', $id_user)->select(['id', 'subject'])->get();
+
+        return view('workflow-actions.create')->with(['workflows' => $workflows, 'emails' => $emails ]);
     }
 
     /**

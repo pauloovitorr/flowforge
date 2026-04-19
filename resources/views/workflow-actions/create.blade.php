@@ -11,12 +11,12 @@
                     icon: 'error',
                     title: 'Ops! Verifique os dados',
                     html: `
-                                                    <ul class="text-left list-disc pl-5">
-                                                        @foreach ($errors->all() as $error)
-                                                            <li>{{ $error }}</li>
-                                                        @endforeach
-                                                    </ul>
-                                                `,
+                                                                        <ul class="text-left list-disc pl-5">
+                                                                            @foreach ($errors->all() as $error)
+                                                                                <li>{{ $error }}</li>
+                                                                            @endforeach
+                                                                        </ul>
+                                                                    `,
                     confirmButtonColor: '#18181b',
                 });
             });
@@ -42,15 +42,25 @@
             <form action="{{ route('workflow_action.store') }}" method="POST" id="form-action" class="p-8 space-y-10">
                 @csrf
 
-                <!-- Nome da Action -->
+                
                 <div class="flex flex-col gap-2">
                     <label for="workflow_id" class="text-sm font-semibold text-zinc-700">Workflow <span
                             class="text-red-500">*</span></label>
-                    <select
+
+                    <select id="workflow_id" name="workflow_id"
                         class="w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
-                        id="workflow_id" name="workflow_id" value="{{ old('workflow_id') }}" required>
-                        <option value="nome">nome</option>
+                        >
+                        <option>
+                            Selecione um projeto
+                        </option>
+
+                        @foreach($workflows as $workflow)
+                            <option value="{{ $workflow->id }}" {{ old('workflow_id') == $workflow->id ? 'selected' : '' }}>
+                                {{ $workflow->name }}
+                            </option>
+                        @endforeach
                     </select>
+
                 </div>
 
                 <!-- Tipo da Action -->
@@ -84,50 +94,34 @@
                             </div>
                         </button>
                     </div>
-                    <input type="hidden" id="type" name="type" value="{{ old('type', 'email') }}" required>
+                    <input type="hidden" id="type" name="type" value="{{ old('type', 'email') }}" >
                 </div>
 
                 <!-- ==================== SEÇÃO EMAIL ==================== -->
-                <div id="section-email" class="action-section space-y-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="template_id" class="text-sm font-semibold text-zinc-700">Template de E-mail
-                                <span class="text-red-500">*</span></label>
-                            <select id="template_id" name="template_id"
-                                class="mt-2 w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 outline-none">
-                                <option value="">Selecione um template...</option>
-                                <!-- Preencher via JS ou com  no backend -->
-                            </select>
-                        </div>
+                <div id="section-email" class="flex flex-col gap-2">
+                    <label for="template_id" class="text-sm font-semibold text-zinc-700">Template de E-mail
+                        <span class="text-red-500">*</span></label>
 
-                        <div>
-                            <label for="subject" class="text-sm font-semibold text-zinc-700">Assunto do E-mail</label>
-                            <input type="text" id="subject" name="subject" value="{{ old('subject') }}"
-                                class="mt-2 w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 outline-none"
-                                placeholder="Ex: Bem-vindo à nossa plataforma!">
-                        </div>
-                    </div>
+                    <select id="template_id" name="template_id"
+                        class="w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
+                        >
+                        <option value="">Selecione um template...</option>
 
-                    <!-- Mapeamento de Variáveis -->
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <label class="text-sm font-semibold text-zinc-700">Mapeamento de Variáveis</label>
-                                <p class="text-xs text-zinc-500 mt-1">Relacione as variáveis do template com campos do
-                                    payload do evento</p>
-                            </div>
-                            <button type="button" id="add-mapping-email"
-                                class="flex items-center gap-2 text-sm text-cyan-600 hover:text-cyan-700 font-medium">
-                                <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                                Adicionar mapeamento
-                            </button>
-                        </div>
+                        @foreach ($emails as $email)
+                            <option value="{{ $email->id }}" {{ old('workflow_id') == $email->id ? 'selected' : '' }}>
+                                {{ $email->subject }}
+                            </option>
+                        @endforeach
 
-                        <div id="email-mappings" class="space-y-3">
-                            <!-- Preenchido via JS -->
-                        </div>
-                    </div>
+                    </select>
+
+
+
                 </div>
+
+
+
+
 
                 <!-- ==================== SEÇÃO API ==================== -->
                 <div id="section-api" class="action-section space-y-8 hidden">
@@ -138,14 +132,14 @@
                                     class="text-red-500">*</span></label>
                             <input type="text" name="url" value="{{ old('url') }}"
                                 class="mt-2 w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 outline-none"
-                                placeholder="https://api.exemplo.com/endpoint" required>
+                                placeholder="https://api.exemplo.com/endpoint" >
                         </div>
                         <div>
                             <label class="text-sm font-semibold text-zinc-700">Método HTTP <span
                                     class="text-red-500">*</span></label>
                             <select name="method"
                                 class="mt-2 w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 outline-none"
-                                required>
+                                >
                                 <option value="POST" {{ old('method') == 'POST' ? 'selected' : '' }}>POST</option>
                                 <option value="PUT" {{ old('method') == 'PUT' ? 'selected' : '' }}>PUT</option>
                                 <option value="PATCH" {{ old('method') == 'PATCH' ? 'selected' : '' }}>PATCH</option>
@@ -175,7 +169,8 @@
                         <div class="flex items-center justify-between mb-4">
 
                             <label class="text-sm font-semibold text-zinc-700">Mapeamento do Body <p
-                                    class="text-xs text-zinc-500">Indique o caminho dos dados originais do evento para
+                                    class="text-xs text-zinc-500">Indique o caminho dos dados originais do evento
+                                    para
                                     cada campo da requisição.</p></label>
 
 

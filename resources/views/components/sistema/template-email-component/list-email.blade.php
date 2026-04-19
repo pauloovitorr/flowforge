@@ -6,8 +6,8 @@
         <div class="flex justify-between items-start mb-3">
             <div class="truncate">
                 <div class="flex gap-2 items-center justify-between">
-                    <h3 class="text-base font-semibold text-gray-800 truncate" title="{{ $email->name }}">
-                        {{ $email->name }}
+                    <h3 class="text-base font-semibold text-gray-800 truncate" title="{{ $email->subjec }}">
+                        {{ $email->subject }}
                     </h3>
                     <span class="text-gray-300">-</span>
                     <p class="text-[11px] text-gray-400 font-medium">

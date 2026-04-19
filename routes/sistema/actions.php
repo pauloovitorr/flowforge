@@ -19,6 +19,5 @@ Route::controller(WorkflowActionsController::class)
 
         Route::delete('/workflow_action/{workflow_action}', 'destroy')->name('workflow_action.destroy');
 
-        
 
     });

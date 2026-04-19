@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('emails', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete();
-            $table->string('name');
-            $table->enum('status', ['active','inactive']);
+            $table->string('subject');
+            $table->string('recipient');
+            $table->enum('status', ['active', 'inactive']);
             $table->text('body');
             $table->timestamps();
         });
