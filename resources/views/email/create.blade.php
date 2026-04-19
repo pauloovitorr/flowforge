@@ -5,7 +5,7 @@
         <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 
         <style>
-            .ql-toolbar.ql-snow{
+            .ql-toolbar.ql-snow {
                 border-radius: 8px;
             }
         </style>
@@ -18,12 +18,12 @@
                     icon: 'error',
                     title: 'Ops! Verifique os dados',
                     html: `
-                        <ul style="text-align: center;">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    `,
+                                            <ul style="text-align: center;">
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        `,
                     confirmButtonColor: '#18181b',
                 });
             });
@@ -55,7 +55,8 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Campo Nome --}}
                     <div class="flex flex-col gap-1">
-                        <label for="template-name" class="text-sm font-medium text-zinc-700">Nome do Template <span class="text-red-600">*</span></label>
+                        <label for="template-name" class="text-sm font-medium text-zinc-700">Nome do Template <span
+                                class="text-red-600">*</span></label>
                         <input type="text" id="template-name" name="name" value="{{ old('name') }}"
                             class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
                             placeholder="Ex: Boas-vindas - Cliente Novo" required>
@@ -63,7 +64,8 @@
 
                     {{-- Campo Status --}}
                     <div class="flex flex-col gap-1">
-                        <label for="template-status" class="text-sm font-medium text-zinc-700">Status <span class="text-red-600">*</span></label>
+                        <label for="template-status" class="text-sm font-medium text-zinc-700">Status <span
+                                class="text-red-600">*</span></label>
                         <select id="template-status" name="status"
                             class="w-full p-2.5 border border-zinc-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
                             required>
@@ -76,7 +78,18 @@
 
                 {{-- Campo Body - Quill Editor --}}
                 <div class="flex flex-col gap-1">
-                    <label class="text-sm font-medium text-zinc-700">Conteúdo do Email (Body) <span class="text-red-600">*</span></label>
+                    <label class="text-sm font-medium text-zinc-700">Conteúdo do Email (Body) <span
+                            class="text-red-600">*</span></label>
+
+                    <div class="bg-blue-50  p-3 mb-2 rounded-lg text-sm text-blue-800">
+                        <p><strong>Dica de Personalização:</strong> Use chaves duplas para adicionar campos dinâmicos.
+                        </p>
+                        <code class="bg-white px-1 py-0.5 rounded border border-blue-200 text-blue-900">
+                            @{{ nome_do_cliente }}</code>
+                        <span class="ml-1">será substituído pelo valor enviado no endpoint com a chave
+                            nome_do_cliente.</span>
+                    </div>
+
                     <input type="hidden" name="body" id="template-body" value="{{ old('body') }}">
                     <div id="quill-editor" class="bg-white border border-zinc-300 rounded-lg min-h-[300px]"></div>
                 </div>
