@@ -27,7 +27,7 @@ class EventController extends Controller
 
             $project_id = EventService::searchProject($request->bearerToken());
 
-            $event = EventService::createProject( $project_id, $request->validated());
+            $event = EventService::createProject($project_id, $request->validated());
 
             return response()->json([
                 'status' => 'success',

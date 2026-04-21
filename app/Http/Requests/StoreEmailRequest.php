@@ -24,7 +24,6 @@ class StoreEmailRequest extends FormRequest
     {
         return [
             'subject' => 'required|string|max:255',
-            'recipient' => 'required|string|max:255|regex:/^\{\{.*\}\}$/',
             'body' => 'required|string|min:20',
             'user_id' => 'required|integer|exists:users,id',
             'status' => 'required|in:active,inactive',
@@ -37,11 +36,6 @@ class StoreEmailRequest extends FormRequest
             'subject.required' => 'O assunto do e-mail é obrigatório.',
             'subject.string' => 'O assunto deve ser um texto válido.',
             'subject.max' => 'O assunto não pode ultrapassar 255 caracteres.',
-
-            'recipient.required' => 'A variável do destinatário é obrigatória.',
-            'recipient.string' => 'O destinatário deve ser um texto válido.',
-            'recipient.max' => 'A variável não pode ultrapassar 255 caracteres.',
-            'recipient.regex' => 'O formato da variável deve ser {{ nome_da_variavel }}.',
 
             'body.required' => 'O conteúdo do e-mail (Body) é obrigatório.',
             'body.string' => 'O conteúdo deve ser um texto válido.',

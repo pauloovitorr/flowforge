@@ -28,8 +28,9 @@ class WorkflowActionsController extends Controller
 
         $workflows = Workflow::where('user_id', $id_user)->select(['id', 'name'])->get();
 
-        $emails = Email::where('user_id', $id_user)->select(['id', 'subject'])->get();
+        $emails = Email::where('user_id', $id_user)->where('status', 'active')->select(['id', 'subject', 'body'])->get();
 
+        
         return view('workflow-actions.create')->with(['workflows' => $workflows, 'emails' => $emails ]);
     }
 

@@ -9,7 +9,6 @@ class Email extends Model
     protected $fillable = [
         'user_id',
         'subject',
-        'recipient',
         'status',
         'body',
     ];

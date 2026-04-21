@@ -11,12 +11,12 @@
                     icon: 'error',
                     title: 'Ops! Verifique os dados',
                     html: `
-                                                                        <ul class="text-left list-disc pl-5">
-                                                                            @foreach ($errors->all() as $error)
-                                                                                <li>{{ $error }}</li>
-                                                                            @endforeach
-                                                                        </ul>
-                                                                    `,
+                                                                                        <ul class="text-left list-disc pl-5">
+                                                                                            @foreach ($errors->all() as $error)
+                                                                                                <li>{{ $error }}</li>
+                                                                                            @endforeach
+                                                                                        </ul>
+                                                                                    `,
                     confirmButtonColor: '#18181b',
                 });
             });
@@ -42,14 +42,13 @@
             <form action="{{ route('workflow_action.store') }}" method="POST" id="form-action" class="p-8 space-y-10">
                 @csrf
 
-                
+
                 <div class="flex flex-col gap-2">
                     <label for="workflow_id" class="text-sm font-semibold text-zinc-700">Workflow <span
                             class="text-red-500">*</span></label>
 
                     <select id="workflow_id" name="workflow_id"
-                        class="w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
-                        >
+                        class="w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all">
                         <option>
                             Selecione um projeto
                         </option>
@@ -94,7 +93,7 @@
                             </div>
                         </button>
                     </div>
-                    <input type="hidden" id="type" name="type" value="{{ old('type', 'email') }}" >
+                    <input type="hidden" id="type" name="type" value="{{ old('type', 'email') }}">
                 </div>
 
                 <!-- ==================== SEÇÃO EMAIL ==================== -->
@@ -103,8 +102,7 @@
                         <span class="text-red-500">*</span></label>
 
                     <select id="template_id" name="template_id"
-                        class="w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
-                        >
+                        class="w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all">
                         <option value="">Selecione um template...</option>
 
                         @foreach ($emails as $email)
@@ -116,6 +114,24 @@
                     </select>
 
 
+                    <div id="preview-payload-container" class="hidden mt-4 animate-fadeIn">
+                        <label class="text-xs font-bold text-zinc-500 uppercase tracking-wider">Exemplo de Requisição para envio do e-mail</label>
+                        <p class="mt-2 text-xs text-zinc-500 italic">
+                            * Os dados abaixo são exemplificativos e demonstram como as variáveis deste template devem ser estruturadas. Para que o disparo ocorra, você deve enviar os dados completo para o endpoint /event, incluindo sua API KEY e o Trigger do workflow, além dos campos listados.
+                        </p>
+                        <div class="mt-2 bg-zinc-950 border border-zinc-800 rounded-xl p-4 overflow-hidden relative">
+                            <div
+                                class="absolute top-3 right-3 text-[10px] bg-cyan-500/10 text-cyan-500 px-2 py-1 rounded-md border border-cyan-500/20">
+                                JSON
+                            </div>
+
+                            <pre
+                                class="text-cyan-400 font-mono text-sm leading-relaxed overflow-x-auto"><code id="json-display"></code></pre>
+                        </div>
+                        <p class="mt-2 text-xs text-zinc-500 italic">
+                            * As variáveis no objeto "payload" foram extraídas automaticamente do seu template.
+                        </p>
+                    </div>
 
                 </div>
 
@@ -132,14 +148,13 @@
                                     class="text-red-500">*</span></label>
                             <input type="text" name="url" value="{{ old('url') }}"
                                 class="mt-2 w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 outline-none"
-                                placeholder="https://api.exemplo.com/endpoint" >
+                                placeholder="https://api.exemplo.com/endpoint">
                         </div>
                         <div>
                             <label class="text-sm font-semibold text-zinc-700">Método HTTP <span
                                     class="text-red-500">*</span></label>
                             <select name="method"
-                                class="mt-2 w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 outline-none"
-                                >
+                                class="mt-2 w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 outline-none">
                                 <option value="POST" {{ old('method') == 'POST' ? 'selected' : '' }}>POST</option>
                                 <option value="PUT" {{ old('method') == 'PUT' ? 'selected' : '' }}>PUT</option>
                                 <option value="PATCH" {{ old('method') == 'PATCH' ? 'selected' : '' }}>PATCH</option>
@@ -202,6 +217,52 @@
 
     @push('script')
         @vite('resources/js/pages/workflow_action.js')
+
+        <script type="module">
+
+            $(document).ready(function () {
+
+                // Transformamos a coleção do Laravel em um objeto JS indexado pelo ID
+                const emailTemplates = @json($emails->keyBy('id'));
+
+                $('#template_id').on('change', function () {
+                    const templateId = $(this).val();
+                    const $container = $('#preview-payload-container');
+                    const $display = $('#json-display');
+
+                    if (!templateId) {
+                        $container.addClass('hidden');
+                        return;
+                    }
+
+                    // 1. Pega o corpo do e-mail do nosso objeto JS
+                    const body = emailTemplates[templateId].body;
+
+                    // 2. Regex para encontrar todas as ocorrências de variaveis
+                    // Captura o que está dentro das chaves ignorando espaços
+                    const regex = /\{\{\s*([\w_]+)\s*\}\}/g;
+                    let match;
+                    const variables = {};
+
+                    while ((match = regex.exec(body)) !== null) {
+
+                        const varName = match[1];
+                        // Evita duplicados e define um valor de exemplo
+                        variables[varName] = "valor_exemplo";
+                    }
+
+                    // 3. Monta a estrutura final desejada
+                    const jsonExample = {
+                        recipient: "cliente@email.com",
+                        payload: variables
+                    };
+
+                    // 4. Renderiza com formatação (4 espaços de indentação)
+                    $display.text(JSON.stringify(jsonExample, null, 4));
+                    $container.removeClass('hidden');
+                });
+            });
+        </script>
     @endpush
 
 </x-layouts.sistema>
