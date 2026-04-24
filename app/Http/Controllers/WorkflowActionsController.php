@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Service\ActionService;
 use App\Http\Requests\StoreWorkflowActionsRequest;
 use App\Http\Requests\UpdateWorkflowActionsRequest;
 use App\Models\Email;
@@ -39,7 +40,7 @@ class WorkflowActionsController extends Controller
      */
     public function store(StoreWorkflowActionsRequest $request)
     {
-        dd($request);
+        ActionService::addAction($request->all());
     }
 
     /**

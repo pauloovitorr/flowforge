@@ -98,10 +98,10 @@
 
                 <!-- ==================== SEÇÃO EMAIL ==================== -->
                 <div id="section-email" class="flex flex-col gap-2">
-                    <label for="template_id" class="text-sm font-semibold text-zinc-700">Template de E-mail
+                    <label for="email_id" class="text-sm font-semibold text-zinc-700">Template de E-mail
                         <span class="text-red-500">*</span></label>
 
-                    <select id="template_id" name="template_id"
+                    <select id="email_id" name="email_id"
                         class="w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all">
                         <option value="">Selecione um template...</option>
 
@@ -225,7 +225,7 @@
                 // Transformamos a coleção do Laravel em um objeto JS indexado pelo ID
                 const emailTemplates = @json($emails->keyBy('id'));
 
-                $('#template_id').on('change', function () {
+                $('#email_id').on('change', function () {
                     const templateId = $(this).val();
                     const $container = $('#preview-payload-container');
                     const $display = $('#json-display');

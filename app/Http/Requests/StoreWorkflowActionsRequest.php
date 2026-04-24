@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreWorkflowActionsRequest extends FormRequest
 {
@@ -23,7 +24,22 @@ class StoreWorkflowActionsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'workflow_id' => [
+                'required',
+                'integer',
+                Rule::exists('workflows', 'id')->where(function ($query) {
+                    $query->where('user_id', auth()->id());
+                }),
+            ],
+
+            'email_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('emails', 'id')->where(function ($query) {
+                    $query->where('user_id', auth()->id());
+                }),
+            ],
+
         ];
     }
 }
