@@ -1,7 +1,7 @@
 <x-layouts.sistema>
 
     @push('style')
-        @vite('resources/css/pages/workflow.css')
+        @vite('resources/css/pages/select2.css')
     @endpush
 
     @if ($errors->any())
@@ -11,12 +11,12 @@
                     icon: 'error',
                     title: 'Ops! Verifique os dados',
                     html: `
-                                                                                        <ul class="text-left list-disc pl-5">
-                                                                                            @foreach ($errors->all() as $error)
-                                                                                                <li>{{ $error }}</li>
-                                                                                            @endforeach
-                                                                                        </ul>
-                                                                                    `,
+                                                                                                <ul class="text-left list-disc pl-5">
+                                                                                                    @foreach ($errors->all() as $error)
+                                                                                                        <li>{{ $error }}</li>
+                                                                                                    @endforeach
+                                                                                                </ul>
+                                                                                            `,
                     confirmButtonColor: '#18181b',
                 });
             });
@@ -48,8 +48,8 @@
                             class="text-red-500">*</span></label>
 
                     <select id="workflow_id" name="workflow_id"
-                        class="w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all">
-                        <option>
+                        class="w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all" required>
+                        <option value="">
                             Selecione um projeto
                         </option>
 
@@ -115,9 +115,12 @@
 
 
                     <div id="preview-payload-container" class="hidden mt-4 animate-fadeIn">
-                        <label class="text-xs font-bold text-zinc-500 uppercase tracking-wider">Exemplo de Requisição para envio do e-mail</label>
+                        <label class="text-xs font-bold text-zinc-500 uppercase tracking-wider">Exemplo de Requisição
+                            para envio do e-mail</label>
                         <p class="mt-2 text-xs text-zinc-500 italic">
-                            * Os dados abaixo são exemplificativos e demonstram como as variáveis deste template devem ser estruturadas. Para que o disparo ocorra, você deve enviar os dados completo para o endpoint /event, incluindo sua API KEY e o Trigger do workflow, além dos campos listados.
+                            * Os dados abaixo são exemplificativos e demonstram como as variáveis deste template devem
+                            ser estruturadas. Para que o disparo ocorra, você deve enviar os dados completo para o
+                            endpoint /event, incluindo sua API KEY e o Trigger do workflow, além dos campos listados.
                         </p>
                         <div class="mt-2 bg-zinc-950 border border-zinc-800 rounded-xl p-4 overflow-hidden relative">
                             <div
@@ -183,10 +186,9 @@
                     <div>
                         <div class="flex items-center justify-between mb-4">
 
-                            <label class="text-sm font-semibold text-zinc-700">Mapeamento do Body <p
-                                    class="text-xs text-zinc-500">Indique o caminho dos dados originais do evento
-                                    para
-                                    cada campo da requisição.</p></label>
+                            <label class="w-[80%]  text-sm font-semibold text-zinc-700">Mapeamento do Body 
+                                <p class="text-xs text-zinc-500">Defina como os dados serão enviados na requisição. No campo Chave, digite o nome que a API externa espera receber. No campo Valor, insira a variável correspondente ao dado que você está enviando via /event (ex: @{{ nome_cliente }}).</p>
+                            </label>
 
 
                             <button type="button" id="add-body-field"
@@ -239,7 +241,7 @@
                     const body = emailTemplates[templateId].body;
 
                     // 2. Regex para encontrar todas as ocorrências de variaveis
-                    // Captura o que está dentro das chaves ignorando espaços
+                    // Captura o que está dentro das chaves
                     const regex = /\{\{\s*([\w_]+)\s*\}\}/g;
                     let match;
                     const variables = {};
@@ -261,6 +263,8 @@
                     $display.text(JSON.stringify(jsonExample, null, 4));
                     $container.removeClass('hidden');
                 });
+
+
             });
         </script>
     @endpush

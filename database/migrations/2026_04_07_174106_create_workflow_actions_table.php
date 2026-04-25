@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('workflow_actions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('workflow_id')->constrained('workflows', 'id')->cascadeOnDelete();
-            $table->foreignId('email_id')->constrained('emails', 'id')->cascadeOnDelete();
+            $table->foreignId('email_id')->nullable()->constrained('emails', 'id')->cascadeOnDelete();
             $table->enum('type',['email', 'api']);
             $table->json('config_api')->nullable();
             $table->timestamps();

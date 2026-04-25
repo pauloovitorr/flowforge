@@ -8,7 +8,9 @@ use App\Http\Requests\UpdateWorkflowActionsRequest;
 use App\Models\Email;
 use App\Models\Workflow;
 use App\Models\WorkflowActions;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class WorkflowActionsController extends Controller
 {
@@ -31,8 +33,7 @@ class WorkflowActionsController extends Controller
 
         $emails = Email::where('user_id', $id_user)->where('status', 'active')->select(['id', 'subject', 'body'])->get();
 
-        
-        return view('workflow-actions.create')->with(['workflows' => $workflows, 'emails' => $emails ]);
+        return view('workflow-actions.create')->with(['workflows' => $workflows, 'emails' => $emails]);
     }
 
     /**
@@ -40,7 +41,22 @@ class WorkflowActionsController extends Controller
      */
     public function store(StoreWorkflowActionsRequest $request)
     {
-        ActionService::addAction($request->all());
+
+        try {
+
+            ActionService::addAction($request->all());
+
+            return redirect()->route('workflow_action.index')->with('success', 'Action criada com sucesso!');
+
+        } catch (Exception $e) {
+
+            Log::error('Erro ao criar action: '.$e->getMessage());
+
+            return redirect()->back()
+                ->withErrors(['error' => 'Não foi possível criar a action. Tente novamente mais tarde.'])
+                ->withInput();
+        }
+
     }
 
     /**

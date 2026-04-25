@@ -1,7 +1,7 @@
 <x-layouts.sistema>
 
     @push('style')
-        @vite('resources/css/pages/workflow.css')
+        @vite('resources/css/pages/select2.css')
     @endpush
 
     @if ($errors->any())

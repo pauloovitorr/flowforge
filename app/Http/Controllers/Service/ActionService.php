@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Service;
 
 use App\Models\Email;
+use App\Models\WorkflowActions;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,8 +13,17 @@ class ActionService
     {
 
         try {
-            
-            dd($data);
+
+            if ($data['type'] == 'email') {
+                WorkflowActions::create([
+                    'workflow_id' => $data['workflow_id'],
+                    'email_id' => $data['email_id'],
+                    'type' => 'email',
+                ]);
+            }
+            elseif($data['type'] == 'api'){
+                dd($data);
+            }
 
         } catch (Exception $e) {
 
@@ -37,5 +47,4 @@ class ActionService
             throw $e;
         }
     }
-
 }

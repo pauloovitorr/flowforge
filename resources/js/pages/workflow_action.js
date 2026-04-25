@@ -46,48 +46,68 @@ $(function () {
         keyName = "",
         valueName = "",
         placeholder = "",
-        isRemovable = true,
+        classPersonalizada = "", // Classe que define se terá máscara ou estilo especial
     ) {
-        const removeBtnHtml = isRemovable
-            ? `<button type="button" class="remove-row text-red-400 hover:text-red-600 p-2 transition-colors shrink-0">
-                <i data-lucide="trash-2" class="w-5 h-5"></i>
-           </button>`
-            : `<div class="w-9"></div>`;
+        // O botão de remover agora é padrão para todos
+        const removeBtnHtml = `
+        <button type="button" class="remove-row text-red-400 hover:text-red-600 p-2 transition-colors shrink-0">
+            <i data-lucide="trash-2" class="w-5 h-5"></i>
+        </button>`;
 
         const rowHtml = `
-        <div class="flex items-center gap-3 bg-zinc-50 p-3 rounded-xl border border-zinc-200 mb-2 w-full" style="display: none;">
-            
-            <div class="flex-1">
-                <input type="text" name="${keyName}" 
-                       class="w-full px-3 py-2 border border-zinc-300 rounded-lg text-sm focus:border-cyan-500 outline-none bg-white"
-                       placeholder="Chave">
-            </div>
-            
-            <div class="shrink-0 flex items-center justify-center text-zinc-400">
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </div>
-            
-            <div class="flex-1">
-                <input type="text" name="${valueName}" 
-                       class="w-full px-3 py-2 border border-zinc-300 rounded-lg text-sm focus:border-cyan-500 outline-none bg-white"
-                       placeholder="${placeholder}">
-            </div>
-            
-            <div class="shrink-0">
-                ${removeBtnHtml}
-            </div>
-        </div>`;
+    <div class="flex items-center gap-3 bg-zinc-50 p-3 rounded-xl border border-zinc-200 mb-2 w-full" style="display: none;">
+        
+        <div class="flex-1">
+            <input type="text" name="${keyName}" 
+                   class="w-full px-3 py-2 border border-zinc-300 rounded-lg text-sm focus:border-cyan-500 outline-none bg-white"
+                   placeholder="Chave">
+        </div>
+        
+        <div class="shrink-0 flex items-center justify-center text-zinc-400">
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </div>
+        
+        <div class="flex-1">
+            <input type="text" name="${valueName}" 
+                   class="value-input w-full px-3 py-2 border border-zinc-300 rounded-lg text-sm focus:border-cyan-500 outline-none bg-white ${classPersonalizada}"
+                   placeholder="${placeholder}">
+        </div>
+        
+        <div class="shrink-0">
+            ${removeBtnHtml}
+        </div>
+    </div>`;
 
         const $row = $(rowHtml);
 
-        // Lógica de Fade Out com Remoção Real
-        if (isRemovable) {
-            $row.find(".remove-row").on("click", function () {
-                $row.fadeOut(300, function () {
-                    $(this).remove(); // Remove do DOM após sumir
-                });
+        
+        $row.find(".value-input").on("blur", function () {
+            let $el = $(this);
+
+            // Verifica se o input atual tem a classe que dispara a limpeza/máscara
+            if (classPersonalizada && $el.hasClass(classPersonalizada)) {
+                let value = $el.val().trim();
+
+                if (value.length > 0) {
+                    let cleanValue = value.replace(/[\{\}]/g, "").trim();
+
+                    cleanValue = cleanValue
+                        .replace(/\s+/g, "_")
+                        .replace(/[^\w]/g, "")
+                        .toLowerCase();
+
+                    let finalValue = `{{ ${cleanValue} }}`;
+                    $el.val(finalValue);
+                }
+            }
+        });
+
+        // Evento de remoção (sempre ativo)
+        $row.find(".remove-row").on("click", function () {
+            $row.fadeOut(300, function () {
+                $(this).remove();
             });
-        }
+        });
 
         // Adiciona ao container e executa o Fade In
         $container.append($row);
@@ -98,11 +118,7 @@ $(function () {
         }
     }
 
-    // Email Mappings
-    // const $emailMappingsContainer = $("#email-mappings");
-    // $("#add-mapping-email").on("click", () => {
-    //     createMappingRow($emailMappingsContainer, "template_variables[]", "payload_paths[]", "payload.dado");
-    // });
+   
 
     // Headers
     const $headersContainer = $("#headers-container");
@@ -118,11 +134,11 @@ $(function () {
     // Body Fields
     const $bodyContainer = $("#body-mappings");
     $("#add-body-field").on("click", () => {
-        createMappingRow(
-            $bodyContainer,
-            "body_keys[]",
-            "body_values[]",
-            "payload.dado",
-        );
+        createMappingRow($bodyContainer, "keys[]", "values[]", "{{variavel}}", "mask-variable");
     });
+
+    // $("#workflow_id").select2({
+    //     placeholder: "Selecione um projeto",
+    //     width: "100%",
+    // });
 });

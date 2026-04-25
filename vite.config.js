@@ -6,7 +6,7 @@ export default defineConfig({
         laravel({
             input: [
                 "resources/css/app.css",
-                "resources/css/pages/workflow.css",
+                "resources/css/pages/select2.css",
                 "resources/js/app.js",
                 "resources/js/pages/project.js",
                 "resources/js/pages/workflow.js",
