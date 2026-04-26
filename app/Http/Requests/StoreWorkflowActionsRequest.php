@@ -57,33 +57,42 @@ class StoreWorkflowActionsRequest extends FormRequest
                         $fail("A chave para o valor de header '{$value}' é obrigatória.");
                     }
                 },
-        ],
+            ],
 
-            // Validação do Body (Keys/Values)
-            'keys' => ['sometimes', 'array'],
-            'values' => ['sometimes', 'array'],
-            'keys.*' => [
+          // Body
+            'body_keys' => ['sometimes', 'array'],
+            'body_values' => ['sometimes', 'array'],
+
+            'body_keys.*' => [
                 'nullable',
                 'string',
                 function ($attribute, $value, $fail) {
+                    // Ex: body_keys.0 -> extrai o 0
                     $index = explode('.', $attribute)[1];
-                    $val = request("values.{$index}");
+                    // Busca o valor correspondente no array de values
+                    $val = request("body_values.{$index}");
+
                     if (! empty($value) && (is_null($val) || $val === '')) {
                         $fail("O valor para a chave '{$value}' não pode ser vazio.");
                     }
                 },
-        ],
-            'values.*' => [
+            ],
+
+            'body_values.*' => [
                 'nullable',
                 'string',
                 function ($attribute, $value, $fail) {
+                    // Ex: body_values.0 -> extrai o 0
                     $index = explode('.', $attribute)[1];
-                    $key = request("keys.{$index}");
+                    // Busca a chave correspondente no array de keys
+                    $key = request("body_keys.{$index}");
+
                     if (! empty($value) && (is_null($key) || $key === '')) {
                         $fail("A chave para o valor '{$value}' não pode ser vazia.");
                     }
                 },
-        ],
+            ],
+
         ];
     }
 }

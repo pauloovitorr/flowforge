@@ -134,7 +134,7 @@ $(function () {
     // Body Fields
     const $bodyContainer = $("#body-mappings");
     $("#add-body-field").on("click", () => {
-        createMappingRow($bodyContainer, "keys[]", "values[]", "{{variavel}}", "mask-variable");
+        createMappingRow($bodyContainer, "body_keys[]", "body_values[]", "{{variavel}}", "mask-variable");
     });
 
     // $("#workflow_id").select2({

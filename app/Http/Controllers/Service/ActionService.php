@@ -20,9 +20,24 @@ class ActionService
                     'email_id' => $data['email_id'],
                     'type' => 'email',
                 ]);
-            }
-            elseif($data['type'] == 'api'){
-                dd($data);
+            } elseif ($data['type'] == 'api') {
+
+                $headers = array_filter(array_combine($data['headers_keys'], $data['headers_values']));
+                $body = array_filter(array_combine($data['body_keys'], $data['body_values']));
+
+                $config_api = [
+                    'url' => $data['url'],
+                    'method' => $data['method'],
+                    'headers' => $headers,
+                    'body' => $body,
+                ];
+
+                WorkflowActions::create([
+                    'workflow_id' => $data['workflow_id'],
+                    'type' => 'api',
+                    'config_api' => $config_api,
+                ]);
+
             }
 
         } catch (Exception $e) {

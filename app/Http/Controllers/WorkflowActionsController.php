@@ -44,7 +44,7 @@ class WorkflowActionsController extends Controller
 
         try {
 
-            ActionService::addAction($request->all());
+            ActionService::addAction($request->validated());
 
             return redirect()->route('workflow_action.index')->with('success', 'Action criada com sucesso!');
 

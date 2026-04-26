@@ -12,4 +12,10 @@ class WorkflowActions extends Model
         'type', 
         'config_api', 
     ];
+
+    public function casts(){
+      return  [
+            'config_api' => 'array'
+        ];
+    }
 }
