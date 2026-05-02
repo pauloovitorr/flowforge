@@ -18,4 +18,8 @@ class WorkflowActions extends Model
             'config_api' => 'array'
         ];
     }
+
+    public function workflow(){
+      return  $this->belongsTo(Workflow::class, 'workflow_id');
+    }
 }

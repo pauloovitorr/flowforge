@@ -19,4 +19,9 @@ class Workflow extends Model
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
+
+    public function actions(){
+        return $this->hasMany(WorkflowActions::class, 'workflow_id');
+    }
+
 }

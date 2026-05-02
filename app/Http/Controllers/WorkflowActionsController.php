@@ -19,7 +19,13 @@ class WorkflowActionsController extends Controller
      */
     public function index()
     {
-        return view('workflow-actions.index');
+        $id_user = Auth::id();
+        $actions = WorkflowActions::whereHas('workflow', function($query) use ($id_user){
+            $query->where('user_id', $id_user);
+        })->with('workflow')->get();
+
+        return view('workflow-actions.index')->with('actions', $actions);
+
     }
 
     /**
