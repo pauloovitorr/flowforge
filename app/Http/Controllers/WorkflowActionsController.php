@@ -20,7 +20,7 @@ class WorkflowActionsController extends Controller
     public function index()
     {
         $id_user = Auth::id();
-        $actions = WorkflowActions::whereHas('workflow', function($query) use ($id_user){
+        $actions = WorkflowActions::whereHas('workflow', function ($query) use ($id_user) {
             $query->where('user_id', $id_user);
         })->with('workflow')->get();
 
@@ -92,8 +92,24 @@ class WorkflowActionsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(WorkflowActions $workflowActions)
+    public function destroy(WorkflowActions $workflow_action)
     {
-        //
+        try {
+
+            $workflow_action->delete();
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Action Excluída com sucesso.',
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('Erro ao excluir action: '.$e->getMessage());
+
+            return response()
+                ->json(
+                    ['error' => 'Não foi possível excluir a action. Tente novamente mais tarde.'],
+                    500);
+        }
     }
 }

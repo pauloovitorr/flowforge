@@ -36,8 +36,8 @@
       <li>
         <a href="{{ route('workflow_action.index') }}"
           class="flex items-center px-4 py-3 text-base rounded-xl transition-all duration-200 group 
-          {{ request()->routeIs('workflow_action.index') ? 'bg-gray-600/30 text-white shadow-lg' : 'text-gray-400 hover:bg-gray-600/20 hover:text-white' }}">
-          <i data-lucide="bolt" class="w-6 h-6 mr-4 transition-colors group-hover:text-cyan-300 {{ request()->routeIs('workflow_action.index') ? 'text-cyan-300' : '' }}"></i>
+          {{ request()->routeIs('workflow_action.*') ? 'bg-gray-600/30 text-white shadow-lg' : 'text-gray-400 hover:bg-gray-600/20 hover:text-white' }}">
+          <i data-lucide="bolt" class="w-6 h-6 mr-4 transition-colors group-hover:text-cyan-300 {{ request()->routeIs('workflow_action.*') ? 'text-cyan-300' : '' }}"></i>
           Actions
         </a>
       </li>
@@ -46,8 +46,8 @@
       <li>
         <a href="{{ route('email.index') }}" 
            class="flex items-center px-4 py-3 text-base rounded-xl transition-all duration-200 group 
-           {{ request()->routeIs('email.index') ? 'bg-gray-600/30 text-white shadow-lg' : 'text-gray-400 hover:bg-gray-600/20 hover:text-white' }}">
-          <i data-lucide="mail" class="w-6 h-6 mr-4 transition-colors group-hover:text-cyan-300 {{ request()->routeIs('email.index') ? 'text-cyan-300' : '' }}"></i>
+           {{ request()->routeIs('email.*') ? 'bg-gray-600/30 text-white shadow-lg' : 'text-gray-400 hover:bg-gray-600/20 hover:text-white' }}">
+          <i data-lucide="mail" class="w-6 h-6 mr-4 transition-colors group-hover:text-cyan-300 {{ request()->routeIs('email.*') ? 'text-cyan-300' : '' }}"></i>
           <span>E-mails</span>
         </a>
       </li>

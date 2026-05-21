@@ -52,6 +52,6 @@
 
 
     @push('script')
-        @vite('resources/js/pages/workflow.js')
+        @vite('resources/js/pages/workflow_action-index.js')
     @endpush
 </x-layouts.sistema>

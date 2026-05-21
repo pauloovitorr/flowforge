@@ -1,6 +1,6 @@
 @props(['action'])
 
-<div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 flex flex-col justify-between group h-full"
+<div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 flex flex-col justify-between group h-full container-template"
     data-id="{{ $action->id }}">
     
     <div>
@@ -38,11 +38,11 @@
             </div>
 
             <!-- Ações Rápidas -->
-            <div class="flex gap-1 bg-zinc-50 p-1 rounded-lg border border-zinc-100 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div class="flex gap-1 bg-zinc-50 p-1 rounded-lg border border-zinc-100">
                 <button title="Editar" class="p-1.5 hover:bg-white hover:shadow-sm rounded-md text-zinc-600 hover:text-gray-900 transition-all">
                     <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                 </button>
-                <button title="Excluir" class="p-1.5 hover:bg-white hover:shadow-sm rounded-md text-zinc-600 hover:text-red-600 transition-all">
+                <button title="Excluir" class="p-1.5 hover:bg-white hover:shadow-sm rounded-md text-zinc-600 hover:text-red-600 transition-all btn-excluir">
                     <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 </button>
             </div>
