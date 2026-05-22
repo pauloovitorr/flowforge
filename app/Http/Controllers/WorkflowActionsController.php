@@ -78,7 +78,14 @@ class WorkflowActionsController extends Controller
      */
     public function edit(WorkflowActions $workflowActions)
     {
-        //
+         $id_user = Auth::id();
+
+        $workflows = Workflow::where('user_id', $id_user)->select(['id', 'name'])->get();
+
+        $emails = Email::where('user_id', $id_user)->where('status', 'active')->select(['id', 'subject', 'body'])->get();
+
+        return view('workflow-actions.edit')->with(['workflows' => $workflows, 'emails' => $emails]);
+       
     }
 
     /**
@@ -86,7 +93,7 @@ class WorkflowActionsController extends Controller
      */
     public function update(UpdateWorkflowActionsRequest $request, WorkflowActions $workflowActions)
     {
-        //
+        dd('paulo');
     }
 
     /**
