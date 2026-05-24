@@ -11,12 +11,12 @@
                     icon: 'error',
                     title: 'Ops! Verifique os dados',
                     html: `
-                        <ul class="text-left list-disc pl-5">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    `,
+                                        <ul class="text-left list-disc pl-5">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    `,
                     confirmButtonColor: '#18181b',
                 });
             });
@@ -39,8 +39,11 @@
         </x-sistema.page-presentation>
 
         <div class="bg-white border border-zinc-200 rounded-2xl shadow-sm overflow-hidden">
-            <form action="{{ route('workflow_action.store') }}" method="POST" id="form-action" class="p-8 space-y-10">
+            <form action="{{ route('workflow_action.update', $action->id) }}" method="POST" id="form-action"
+                class="p-8 space-y-10">
                 @csrf
+
+                @method('PUT')
 
 
                 <div class="flex flex-col gap-2">
@@ -55,7 +58,7 @@
                         </option>
 
                         @foreach($workflows as $workflow)
-                            <option value="{{ $workflow->id }}" {{ old('workflow_id') == $workflow->id ? 'selected' : '' }}>
+                            <option value="{{ $workflow->id }}" {{ $action->workflow_id == $workflow->id ? 'selected' : '' }}>
                                 {{ $workflow->name }}
                             </option>
                         @endforeach
@@ -94,7 +97,7 @@
                             </div>
                         </button>
                     </div>
-                    <input type="hidden" id="type" name="type" value="{{ old('type', 'email') }}">
+                    <input type="hidden" id="type" name="type" value="{{ $action->type ?? '' }}">
                 </div>
 
                 <!-- ==================== SEÇÃO EMAIL ==================== -->
@@ -107,7 +110,7 @@
                         <option value="">Selecione um template...</option>
 
                         @foreach ($emails as $email)
-                            <option value="{{ $email->id }}" {{ old('workflow_id') == $email->id ? 'selected' : '' }}>
+                            <option value="{{ $email->id }}" {{ $action->email_id == $email->id ? 'selected' : '' }}>
                                 {{ $email->subject }}
                             </option>
                         @endforeach
@@ -144,13 +147,14 @@
 
 
                 <!-- ==================== SEÇÃO API ==================== -->
+
                 <div id="section-api" class="action-section space-y-8 hidden">
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="text-sm font-semibold text-zinc-700">URL <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="url" value="{{ old('url') }}"
+                            <input type="text" name="url" value="{{ old('url', $action->config_api['url'] ?? '') }}"
                                 class="mt-2 w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 outline-none"
                                 placeholder="https://api.exemplo.com/endpoint">
                         </div>
@@ -159,10 +163,10 @@
                                     class="text-red-500">*</span></label>
                             <select name="method"
                                 class="mt-2 w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 outline-none">
-                                <option value="POST" {{ old('method') == 'POST' ? 'selected' : '' }}>POST</option>
-                                <option value="PUT" {{ old('method') == 'PUT' ? 'selected' : '' }}>PUT</option>
-                                <option value="PATCH" {{ old('method') == 'PATCH' ? 'selected' : '' }}>PATCH</option>
-                                <option value="GET" {{ old('method') == 'GET' ? 'selected' : '' }}>GET</option>
+                                <option value="POST" {{ old('method', $action->config_api['method'] ?? '') == 'POST' ? 'selected' : '' }}>POST</option>
+                                <option value="PUT" {{ old('method', $action->config_api['method'] ?? '') == 'PUT' ? 'selected' : '' }}>PUT</option>
+                                <option value="PATCH" {{ old('method', $action->config_api['method'] ?? '') == 'PATCH' ? 'selected' : '' }}>PATCH</option>
+                                <option value="GET" {{ old('method', $action->config_api['method'] ?? '') == 'GET' ? 'selected' : '' }}>GET</option>
                             </select>
                         </div>
                     </div>
@@ -269,7 +273,18 @@
                 });
 
 
+
+
+
             });
+        </script>
+
+
+        <script>
+            window.existingActionData = {
+                headers: @json($action->config_api['headers'] ?? []),
+                body: @json($action->config_api['body'] ?? [])
+            };
         </script>
     @endpush
 

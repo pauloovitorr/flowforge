@@ -76,24 +76,76 @@ class WorkflowActionsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(WorkflowActions $workflowActions)
+    public function edit($workflowActions)
     {
-         $id_user = Auth::id();
+        $id_user = Auth::id();
 
         $workflows = Workflow::where('user_id', $id_user)->select(['id', 'name'])->get();
 
         $emails = Email::where('user_id', $id_user)->where('status', 'active')->select(['id', 'subject', 'body'])->get();
 
-        return view('workflow-actions.edit')->with(['workflows' => $workflows, 'emails' => $emails]);
-       
+        $action = WorkflowActions::with('workflow')
+            ->where('id', $workflowActions)
+            ->whereHas('workflow', function ($query) use ($id_user) {
+                $query->where('user_id', $id_user);
+            })
+            ->first();
+
+        // dd($action);
+
+        return view('workflow-actions.edit')->with(['workflows' => $workflows, 'emails' => $emails, 'action' => $action]);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateWorkflowActionsRequest $request, WorkflowActions $workflowActions)
+    public function update(UpdateWorkflowActionsRequest $request, $workflow_action)
     {
-        dd('paulo');
+        try {
+            
+            $validated = $request->validated();
+            
+            $configApi = [
+                'url' => $validated['url'] ?? '',
+                'method' => $validated['method'] ?? 'POST',
+                'headers' => [],
+                'body' => [],
+            ];
+
+            
+
+            // Combina os arrays de KEY => VALUE dos Headers
+            if (! empty($validated['headers_keys']) && ! empty($validated['headers_values'])) {
+                // array_combine transforma ['0' => 'Autorization1'] e ['0' => 'Bearer...'] em ['Autorization1' => 'Bearer...']
+                $configApi['headers'] = array_combine($validated['headers_keys'], $validated['headers_values']);
+            }
+
+            // Combina os arrays de KEY => VALUE do Body
+            if (! empty($validated['body_keys']) && ! empty($validated['body_values'])) {
+                $configApi['body'] = array_combine($validated['body_keys'], $validated['body_values']);
+            }
+
+           
+            $dataToUpdate = [
+                'workflow_id' => $validated['workflow_id'],
+                'type' => $validated['type'],
+                'email_id' => $validated['email_id'] ?? null,
+                'config_api' => $configApi, // O Laravel vai converter isso em JSON graças ao cast('array')
+            ];
+
+            // Envio o array estruturado para o Service
+            ActionService::updateAction($workflow_action, $dataToUpdate);
+
+            return redirect()->route('workflow_action.index')->with('success', 'Action atualizada com sucesso!');
+
+        } catch (Exception $e) {
+            Log::error('Erro ao atualizar action: '.$e->getMessage());
+
+            return redirect()->back()
+                ->withErrors(['error' => 'Não foi possível atualizar a action. Tente novamente mais tarde.'])
+                ->withInput();
+        }
     }
 
     /**
@@ -104,7 +156,7 @@ class WorkflowActionsController extends Controller
         try {
 
             $workflow_action->delete();
-            
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Action Excluída com sucesso.',

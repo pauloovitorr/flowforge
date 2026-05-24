@@ -51,11 +51,13 @@ class ActionService
     {
         try {
 
-            $email = Email::where('id', $id)
-                ->where('user_id', Auth::id())
+            $action = WorkflowActions::where('id', $id)
+                ->whereHas('workflow', function ($query) {
+                    $query->where('user_id', Auth::id());
+                })
                 ->firstOrFail();
 
-            $email->update($data);
+            $action->update($data);
 
         } catch (Exception $e) {
 
