@@ -33,15 +33,9 @@
 
     <div class="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
         @forelse ($workflows as $workflow)
-          <x-sistema.workflow-component.list-workflow
-        :id="$workflow->id"
-        :name="$workflow->name"
-        :project="$workflow->project"
-        :trigger-event="$workflow->trigger_event"
-        :status="$workflow->status"
-        :description="$workflow->description"
-        :created-at="$workflow->created_at"
-    />
+            <x-sistema.workflow-component.list-workflow :id="$workflow->id" :name="$workflow->name"
+                :project="$workflow->project" :trigger-event="$workflow->trigger_event" :status="$workflow->status"
+                :description="$workflow->description" :created-at="$workflow->created_at" :actions="$workflow->actions" />
         @empty
             <div
                 class="col-span-full border-2 border-dashed border-gray-200 rounded-xl p-12 flex flex-col items-center justify-center">

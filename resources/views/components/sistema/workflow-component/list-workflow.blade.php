@@ -5,7 +5,8 @@
     'project' => null,
     'description' => null,
     'triggerEvent',
-    'status' => 'inactive'
+    'status' => 'inactive',
+    'actions' => [] // <-- ADICIONE AQUI
 ])
 
 <div class="workflow bg-white border border-gray-200 rounded-xl shadow-sm p-5 flex flex-col justify-between group"
@@ -49,7 +50,44 @@
         <p class="text-sm text-gray-500 line-clamp-2 mb-4 leading-relaxed">
             {{ $description ?? 'Sem descrição definida para este workflow.' }}
         </p>
-    </div>
+
+        <div class="mb-4">
+            <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2 block">
+                Actions
+            </span>
+            @if(count($actions) > 0)
+
+                <div class="flex flex-wrap gap-2">
+                @foreach($actions as $action)
+                    @php
+                        // Define a URL de edição com base no tipo
+                        // Nota: Se a rota de email precisar do 'email_id' em vez do 'id' da action, 
+                        // basta trocar $action->id por $action->email_id na linha abaixo.
+                        $editRoute = $action->type === 'api' 
+                            ? route('workflow_action.edit', $action->id) 
+                            : url("/email/{$action->email_id}/edit"); 
+                    @endphp
+
+                    <a href="{{ $editRoute }}" 
+                    class="inline-flex items-center gap-1.5 px-2 py-1 bg-gray-50 border border-gray-200 text-gray-600 text-[10px] font-semibold rounded-md uppercase hover:bg-gray-200 hover:border-gray-300 transition-colors cursor-pointer" 
+                    title="Editar Action ID: {{ $action->id }}">
+                        
+                        @if($action->type === 'api')
+                            <i data-lucide="webhook" class="w-3 h-3 text-cyan-500"></i> API
+                        @elseif($action->type === 'email')
+                            <i data-lucide="mail" class="w-3 h-3 text-amber-500"></i> EMAIL
+                        @else
+                            <i data-lucide="zap" class="w-3 h-3 text-gray-400"></i> {{ $action->type }}
+                        @endif
+                    </a>
+                @endforeach
+            </div>
+
+            @else
+                <p class="text-[11px] text-gray-400 italic">Nenhuma action configurada.</p>
+            @endif
+        </div>
+        </div>
 
     <div>
         <div class="bg-gray-50 rounded-lg p-3 border border-gray-100 relative">

@@ -7,6 +7,7 @@ use App\Http\Controllers\Service\Api\EventService;
 use App\Http\Requests\Api\StoreEventRequest;
 use App\Http\Requests\Api\UpdateEventRequest;
 use App\Models\Api\Event;
+use App\Models\Workflow;
 
 class EventController extends Controller
 {
@@ -26,6 +27,14 @@ class EventController extends Controller
         try {
 
             $project_id = EventService::searchProject($request->bearerToken());
+
+            $workflows_id = EventService::searchWorkflow($project_id, $request->event_name);
+
+            $actions = EventService::searchActions($workflows_id);
+
+            $dispatch_tasks = EventService::dispatchJob($actions, $request->payload);
+
+            
 
             $event = EventService::createProject($project_id, $request->validated());
 

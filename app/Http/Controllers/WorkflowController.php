@@ -18,7 +18,11 @@ class WorkflowController extends Controller
     public function index()
     {
         $id_user = Auth::id();
-        $workflows = Workflow::with('project:id,name')->where('user_id', $id_user)->orderBy('created_at', 'desc')->get();
+
+        $workflows = Workflow::with(['project:id,name', 'actions'])
+            ->where('user_id', $id_user)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('workflow.index')->with('workflows', $workflows);
     }
