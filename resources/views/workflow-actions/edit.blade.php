@@ -11,12 +11,12 @@
                     icon: 'error',
                     title: 'Ops! Verifique os dados',
                     html: `
-                                        <ul class="text-left list-disc pl-5">
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    `,
+                                            <ul class="text-left list-disc pl-5">
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        `,
                     confirmButtonColor: '#18181b',
                 });
             });
@@ -232,6 +232,9 @@
 
             $(document).ready(function () {
 
+
+
+
                 // Transformamos a coleção do Laravel em um objeto JS indexado pelo ID
                 const emailTemplates = @json($emails->keyBy('id'));
 
@@ -275,7 +278,7 @@
 
 
 
-
+                $('#email_id').trigger('change');
             });
         </script>
 

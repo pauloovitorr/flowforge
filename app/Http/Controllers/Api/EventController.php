@@ -7,7 +7,6 @@ use App\Http\Controllers\Service\Api\EventService;
 use App\Http\Requests\Api\StoreEventRequest;
 use App\Http\Requests\Api\UpdateEventRequest;
 use App\Models\Api\Event;
-use App\Models\Workflow;
 
 class EventController extends Controller
 {
@@ -25,18 +24,17 @@ class EventController extends Controller
     public function store(StoreEventRequest $request)
     {
         try {
-
+            // 1. Busca as informações vinculadas
             $project_id = EventService::searchProject($request->bearerToken());
-
             $workflows_id = EventService::searchWorkflow($project_id, $request->event_name);
-
             $actions = EventService::searchActions($workflows_id);
 
-            $dispatch_tasks = EventService::dispatchJob($actions, $request->payload);
-
-            
-
+            // 2. CORREÇÃO: Primeiro criamos o registro do Evento na tabela 'events' com status 'pending'
+            // Passamos o project_id e os dados validados do request
             $event = EventService::createProject($project_id, $request->validated());
+
+            // 3. CORREÇÃO: Agora sim, disparamos o Job PASSANDO o ID do evento recém-criado ($event->id)
+            $dispatch_tasks = EventService::dispatchJob($actions, $request->payload, $event->id);
 
             return response()->json([
                 'status' => 'success',
@@ -51,7 +49,6 @@ class EventController extends Controller
             ], 404, [], JSON_UNESCAPED_UNICODE);
 
         }
-
     }
 
     /**
