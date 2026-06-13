@@ -13,7 +13,9 @@ Route::controller(WorkflowController::class)
         Route::get('/workflow/create', 'create')->name('workflow.create');
 
         Route::get('/workflow/{workflow}/edit', 'edit')->name('workflow.edit');
-
+        
+        Route::get('/workflow/{workflow}', 'show')->name('workflow.show');
+        
         Route::put('/workflow/{workflow}', 'update')->name('workflow.update');
 
         Route::post('/workflow', 'store')->name('workflow.store');

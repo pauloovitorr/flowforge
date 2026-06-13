@@ -11,12 +11,12 @@
                     icon: 'error',
                     title: 'Ops! Verifique os dados',
                     html: `
-                                            <ul class="text-left list-disc pl-5">
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                        `,
+                                                <ul class="text-left list-disc pl-5">
+                                                    @foreach ($errors->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            `,
                     confirmButtonColor: '#18181b',
                 });
             });
@@ -152,17 +152,14 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="text-sm font-semibold text-zinc-700">URL <span
-                                    class="text-red-500">*</span></label>
+                            <label class="text-sm font-semibold text-zinc-700">URL <span class="text-red-500">*</span></label>
                             <input type="text" name="url" value="{{ old('url', $action->config_api['url'] ?? '') }}"
                                 class="mt-2 w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 outline-none"
                                 placeholder="https://api.exemplo.com/endpoint">
                         </div>
                         <div>
-                            <label class="text-sm font-semibold text-zinc-700">Método HTTP <span
-                                    class="text-red-500">*</span></label>
-                            <select name="method"
-                                class="mt-2 w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 outline-none">
+                            <label class="text-sm font-semibold text-zinc-700">Método HTTP <span class="text-red-500">*</span></label>
+                            <select name="method" class="mt-2 w-full px-4 py-3 border border-zinc-300 rounded-xl focus:border-cyan-500 outline-none">
                                 <option value="POST" {{ old('method', $action->config_api['method'] ?? '') == 'POST' ? 'selected' : '' }}>POST</option>
                                 <option value="PUT" {{ old('method', $action->config_api['method'] ?? '') == 'PUT' ? 'selected' : '' }}>PUT</option>
                                 <option value="PATCH" {{ old('method', $action->config_api['method'] ?? '') == 'PATCH' ? 'selected' : '' }}>PATCH</option>
@@ -171,41 +168,37 @@
                         </div>
                     </div>
 
-                    <!-- Headers -->
                     <div>
                         <div class="flex items-center justify-between mb-4">
-                            <label class="text-sm font-semibold text-zinc-700">Headers Estáticos <p
-                                    class="text-xs text-zinc-500">Informe os valores fixos que serão enviados no
-                                    cabeçalho da requisição.</p></label>
-
-                            <button type="button" id="add-header"
-                                class="flex items-center gap-2 text-sm text-cyan-600 hover:text-cyan-700 font-medium">
-                                <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                                Adicionar header
+                            <label class="text-sm font-semibold text-zinc-700">Headers Estáticos</label>
+                            <button type="button" id="add-header" class="flex items-center gap-2 text-sm text-cyan-600 hover:text-cyan-700 font-medium">
+                                <i data-lucide="plus-circle" class="w-5 h-5"></i> Adicionar header
                             </button>
                         </div>
                         <div id="headers-container" class="space-y-3"></div>
                     </div>
 
-                    <!-- Body -->
                     <div>
                         <div class="flex items-center justify-between mb-4">
-
-                            <label class="w-[80%]  text-sm font-semibold text-zinc-700">Mapeamento do Body
-                                <p class="text-xs text-zinc-500">Defina como os dados serão enviados na requisição. No
-                                    campo Chave, digite o nome que a API externa espera receber. No campo Valor, insira
-                                    a variável correspondente ao dado que você está enviando via /event (ex: @{{
-                                    nome_cliente }}).</p>
-                            </label>
-
-
-                            <button type="button" id="add-body-field"
-                                class="flex items-center gap-2 text-sm text-cyan-600 hover:text-cyan-700 font-medium">
-                                <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                                Adicionar campo
+                            <label class="w-[80%] text-sm font-semibold text-zinc-700">Mapeamento do Body</label>
+                            <button type="button" id="add-body-field" class="flex items-center gap-2 text-sm text-cyan-600 hover:text-cyan-700 font-medium">
+                                <i data-lucide="plus-circle" class="w-5 h-5"></i> Adicionar campo
                             </button>
                         </div>
                         <div id="body-mappings" class="space-y-3"></div>
+                    </div>
+
+                    <div id="preview-payload-api-container" class="mt-6">
+                        <label class="text-xs font-bold text-zinc-500 uppercase tracking-wider">Estrutura do Payload esperado no /event</label>
+                        <p class="mt-2 text-xs text-zinc-500 italic">
+                            * Monte o mapeamento acima para ver como os dados dinâmicos deverão ser enviados na requisição raiz do seu sistema.
+                        </p>
+                        <div class="mt-2 bg-zinc-950 border border-zinc-800 rounded-xl p-4 overflow-hidden relative">
+                            <div class="absolute top-3 right-3 text-[10px] bg-amber-500/10 text-amber-500 px-2 py-1 rounded-md border border-amber-500/20">
+                                JSON ESPERADO
+                            </div>
+                            <pre class="text-amber-400 font-mono text-sm leading-relaxed overflow-x-auto"><code id="json-api-display">{}</code></pre>
+                        </div>
                     </div>
 
                 </div>
@@ -229,58 +222,89 @@
         @vite('resources/js/pages/workflow_action.js')
 
         <script type="module">
+    $(document).ready(function () {
+        // --- LÓGICA DO EMAIL ---
+        const emailTemplates = @json($emails->keyBy('id'));
 
-            $(document).ready(function () {
+        $('#email_id').on('change', function () {
+            const templateId = $(this).val();
+            const $container = $('#preview-payload-container');
+            const $display = $('#json-display');
+
+            if (!templateId) {
+                $container.addClass('hidden');
+                return;
+            }
+
+            const body = emailTemplates[templateId].body;
+            const regex = /\{\{\s*([\w_]+)\s*\}\}/g;
+            let match;
+            const variables = {};
+
+            while ((match = regex.exec(body)) !== null) {
+                const varName = match[1];
+                variables[varName] = "valor_exemplo";
+            }
+
+            const jsonExample = {
+                recipient: "cliente@email.com",
+                payload: variables
+            };
+
+            $display.text(JSON.stringify(jsonExample, null, 4));
+            $container.removeClass('hidden');
+        });
+
+        $('#email_id').trigger('change');
 
 
+        // --- LÓGICA DO PREVIEW DA API (VERSÃO ROBUSTA) ---
+        function atualizarPreviewApi() {
+            let payloadExemplo = {};
 
+            // Buscamos todas as linhas/divs de input diretas dentro de body-mappings
+            // Independentemente do 'name', pegamos o primeiro input como Chave e o segundo como Valor
+            $('#body-mappings > div, #body-mappings .flex').each(function () {
+                const $inputs = $(this).find('input[type="text"]');
+                
+                if ($inputs.length >= 2) {
+                    const chave = $inputs.eq(0).val().trim();
+                    let valor = $inputs.eq(1).val().trim();
 
-                // Transformamos a coleção do Laravel em um objeto JS indexado pelo ID
-                const emailTemplates = @json($emails->keyBy('id'));
-
-                $('#email_id').on('change', function () {
-                    const templateId = $(this).val();
-                    const $container = $('#preview-payload-container');
-                    const $display = $('#json-display');
-
-                    if (!templateId) {
-                        $container.addClass('hidden');
-                        return;
+                    if (chave) {
+                        // Se o usuário digitou uma variável tipo nome_cliente limpamos os bigodes
+                        if (valor.includes('{{')) {
+                            valor = valor.replace(/\{\{\s*([\w_]+)\s*\}\}/g, '$1');
+                        }
+                        payloadExemplo[chave] = valor || "valor_exemplo";
                     }
-
-                    // 1. Pega o corpo do e-mail do nosso objeto JS
-                    const body = emailTemplates[templateId].body;
-
-                    // 2. Regex para encontrar todas as ocorrências de variaveis
-                    // Captura o que está dentro das chaves
-                    const regex = /\{\{\s*([\w_]+)\s*\}\}/g;
-                    let match;
-                    const variables = {};
-
-                    while ((match = regex.exec(body)) !== null) {
-
-                        const varName = match[1];
-                        // Evita duplicados e define um valor de exemplo
-                        variables[varName] = "valor_exemplo";
-                    }
-
-                    // 3. Monta a estrutura final desejada
-                    const jsonExample = {
-                        recipient: "cliente@email.com",
-                        payload: variables
-                    };
-
-                    // 4. Renderiza com formatação (4 espaços de indentação)
-                    $display.text(JSON.stringify(jsonExample, null, 4));
-                    $container.removeClass('hidden');
-                });
-
-
-
-
-                $('#email_id').trigger('change');
+                }
             });
-        </script>
+
+      
+
+            const estruturaFinal = {
+                payload: payloadExemplo
+            };
+
+            $('#json-api-display').text(JSON.stringify(estruturaFinal, null, 4));
+        }
+
+        // Escuta alterações em QUALQUER input de texto dentro do contêiner do mapeamento do body
+        $('#body-mappings').on('input', 'input', function () {
+            atualizarPreviewApi();
+        });
+
+        // Escuta também quando o usuário clicar em adicionar ou remover campos
+        $(document).on('click', '#add-body-field, [id^="add-"], button', function () {
+            // Pequeno delay para esperar o DOM injetar ou remover o HTML da tela
+            setTimeout(atualizarPreviewApi, 150);
+        });
+
+        // Executa assim que a página termina de carregar para atualizar se já houver dados salvos
+        setTimeout(atualizarPreviewApi, 300);
+    });
+</script>
 
 
         <script>

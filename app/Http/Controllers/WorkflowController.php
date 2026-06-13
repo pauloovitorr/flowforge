@@ -65,7 +65,10 @@ class WorkflowController extends Controller
      */
     public function show(Workflow $workflow)
     {
-        //
+        // Delega toda a regra de negócio e extração de variáveis para o Service
+        $dados = WorkflowService::getWorkflowWithVariables($workflow);
+
+        return view('workflow.show')->with($dados);
     }
 
     /**

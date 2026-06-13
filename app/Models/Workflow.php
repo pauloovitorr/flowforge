@@ -24,4 +24,9 @@ class Workflow extends Model
         return $this->hasMany(WorkflowActions::class, 'workflow_id');
     }
 
+    public function email()
+    {
+        return $this->belongsTo(Email::class, 'email_id');
+    }
+
 }
