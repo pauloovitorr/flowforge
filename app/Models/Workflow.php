@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Workflow extends Model
+{
+    protected $fillable = [
+        'name', 
+        'project_id', 
+        'user_id', 
+        'trigger_event', 
+        'status', 
+        'description'
+        ];
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
+
+    public function actions(){
+        return $this->hasMany(WorkflowActions::class, 'workflow_id');
+    }
+
+    public function email()
+    {
+        return $this->belongsTo(Email::class, 'email_id');
+    }
+
+}
